@@ -107,6 +107,10 @@
         .currency {
             font-size: 1.2em;
         }
+
+        #grafico {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +124,7 @@
     <button onclick="calcularSalarioLiquido()">Calcular Salário Líquido</button>
 
     <div class="result" id="resultado"></div>
+    <canvas id="grafico" width="400" height="400"></canvas>
 </div>
 
 <script>
@@ -241,6 +246,28 @@
                 Valor do Salário Líquido: ${formatarNumero(salarioLiquido)}
             </div>
         `;
+
+        // Criar gráfico de pizza
+        const ctx = document.getElementById('grafico').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Proventos', 'Descontos'],
+                datasets: [{
+                    data: [salarioBruto, totalDescontos],
+                    backgroundColor: ['#36a2eb', '#ffce56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
     }
 </script>
 
