@@ -112,9 +112,10 @@
     }
 
     // Função para formatar números em moeda (separador de milhar)
-  function formatarNumero(valor) {
-    return valor.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(/(\d+),(\d+)/, '$1,$2');
+function formatarNumero(valor) {
+    return valor.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".").replace(".", ",");
 }
+
 
     function calcularSalarioLiquido() {
         let salarioBruto = document.getElementById("salario").value.replace(/[^\d,-]/g, "").replace(",", "."); // Remove os caracteres de moeda e converte para número
