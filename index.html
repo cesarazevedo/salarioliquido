@@ -71,6 +71,15 @@
         #grafico {
             margin-top: 20px;
         }
+
+        /* Destaque do Salário Líquido */
+        .salario-liquido {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -158,7 +167,7 @@
 
         const totalDescontos = inss + irpf;
 
-        // Exibir resultado com resumo de proventos e descontos
+        // Exibir resultado com resumo de proventos, descontos e destaque para salário líquido
         document.getElementById("resultado").innerHTML = `
             <div class="proventos">💼 Proventos: R$ ${salarioBruto.toFixed(2)}</div>
             <div>Salário bruto: R$ ${salarioBruto.toFixed(2)}</div>
@@ -166,6 +175,8 @@
             <div>INSS (${inssPercentual}%): R$ ${inss.toFixed(2)}</div>
             <div>IRPF (${irpfPercentual}%): R$ ${irpf.toFixed(2)}</div>
             <div>Outros descontos: R$ 0,00</div>
+
+            <div class="salario-liquido">💰 Salário Líquido: R$ ${salarioLiquido.toFixed(2)}</div>
         `;
 
         // Criar gráfico de pizza
