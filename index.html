@@ -64,16 +64,38 @@
             border-radius: 10px;
         }
 
-        .proventos, .descontos {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
             font-weight: bold;
-            margin-bottom: 10px;
         }
 
-        #grafico {
-            margin-top: 20px;
+        .proventos {
+            color: green;
         }
 
-        /* Destaque do Salário Líquido */
+        .descontos {
+            color: red;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
         .salario-liquido {
             font-size: 24px;
             font-weight: bold;
@@ -98,7 +120,6 @@
     <button onclick="calcularSalarioLiquido()">Calcular Salário Líquido</button>
 
     <div class="result" id="resultado"></div>
-    <canvas id="grafico" width="400" height="400"></canvas>
 </div>
 
 <script>
@@ -177,39 +198,49 @@
         salarioLiquido -= (inss + irpf);
         const totalDescontos = inss + irpf;
 
-        // Exibe o resultado com formatação adequada
+        // Exibe o resultado na tabela
         document.getElementById("resultado").innerHTML = `
-            <div class="proventos">💼 Proventos: ${formatarNumero(salarioBruto)}</div>
-            <div>Salário bruto: ${formatarNumero(salarioBruto)}</div>
-            <div class="descontos">📉 Descontos: ${formatarNumero(totalDescontos)}</div>
-            <div>INSS (${inssPercentual}%): ${formatarNumero(inss)}</div>
-            <div>IRPF (${irpfPercentual}%): ${formatarNumero(irpf)}</div>
-            <div>Outros descontos: R$ 0,00</div>
-
-            <div class="salario-liquido">💰 Salário Líquido: ${formatarNumero(salarioLiquido)}</div>
+            <h2>Resultado</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Alíquota</th>
+                        <th>Proventos</th>
+                        <th>Descontos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Salário Bruto</td>
+                        <td>-</td>
+                        <td class="proventos">${formatarNumero(salarioBruto)}</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>INSS</td>
+                        <td>${inssPercentual}%</td>
+                        <td>-</td>
+                        <td class="descontos">${formatarNumero(inss)}</td>
+                    </tr>
+                    <tr>
+                        <td>IRPF</td>
+                        <td>${irpfPercentual}%</td>
+                        <td>-</td>
+                        <td class="descontos">${formatarNumero(irpf)}</td>
+                    </tr>
+                    <tr class="total">
+                        <td>Total</td>
+                        <td>-</td>
+                        <td class="proventos">${formatarNumero(salarioBruto)}</td>
+                        <td class="descontos">${formatarNumero(totalDescontos)}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="salario-liquido">
+                Valor do Salário Líquido: ${formatarNumero(salarioLiquido)}
+            </div>
         `;
-
-        // Criar gráfico de pizza
-        const ctx = document.getElementById('grafico').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Proventos', 'Descontos'],
-                datasets: [{
-                    data: [salarioBruto, totalDescontos],
-                    backgroundColor: ['#36a2eb', '#ffce56'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
     }
 </script>
 
