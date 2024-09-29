@@ -80,6 +80,10 @@
             margin-top: 20px;
             text-align: center;
         }
+
+        .currency {
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
@@ -97,13 +101,18 @@
 </div>
 
 <script>
-    // Função para formatar o valor digitado como moeda
+    // Função para formatar o valor digitado como moeda com separador de milhar
     function formatarMoeda(campo) {
         let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
         valor = (valor / 100).toFixed(2) + ""; // Adiciona os centavos
         valor = valor.replace(".", ","); // Substitui o ponto por vírgula
         valor = valor.replace(/(\d)(?=(\d{3})+\,)/g, "$1."); // Adiciona os pontos para milhar
         campo.value = "R$ " + valor;
+    }
+
+    // Função para formatar números em moeda (separador de milhar)
+    function formatarNumero(valor) {
+        return valor.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace(".", ",");
     }
 
     function calcularSalarioLiquido() {
@@ -169,17 +178,17 @@
 
         // Exibir resultado com resumo de proventos, descontos e destaque para salário líquido
         document.getElementById("resultado").innerHTML = `
-            <div class="proventos">💼 Proventos: R$ ${salarioBruto.toFixed(2)}</div>
-            <div>Salário bruto: R$ ${salarioBruto.toFixed(2)}</div>
-            <div class="descontos">📉 Descontos: R$ ${totalDescontos.toFixed(2)}</div>
-            <div>INSS (${inssPercentual}%): R$ ${inss.toFixed(2)}</div>
-            <div>IRPF (${irpfPercentual}%): R$ ${irpf.toFixed(2)}</div>
+            <div class="proventos">💼 Proventos: R$ ${formatarNumero(salarioBruto)}</div>
+            <div>Salário bruto: R$ ${formatarNumero(salarioBruto)}</div>
+            <div class="descontos">📉 Descontos: R$ ${formatarNumero(totalDescontos)}</div>
+            <div>INSS (${inssPercentual}%): R$ ${formatarNumero(inss)}</div>
+            <div>IRPF (${irpfPercentual}%): R$ ${formatarNumero(irpf)}</div>
             <div>Outros descontos: R$ 0,00</div>
 
-            <div class="salario-liquido">💰 Salário Líquido: R$ ${salarioLiquido.toFixed(2)}</div>
+            <div class="salario-liquido">💰 Salário Líquido: R$ ${formatarNumero(salarioLiquido)}</div>
         `;
 
-        // Criar gráfico de pizza
+        // Criar gráfico de pizza com cores profissionais
         const ctx = document.getElementById('grafico').getContext('2d');
         new Chart(ctx, {
             type: 'pie',
@@ -187,7 +196,7 @@
                 labels: ['Proventos', 'Descontos'],
                 datasets: [{
                     data: [salarioBruto, totalDescontos],
-                    backgroundColor: ['#36a2eb', '#ff6384'],
+                    backgroundColor: ['#36a2eb', '#ffce56'],
                 }]
             },
             options: {
@@ -205,3 +214,4 @@
 
 </body>
 </html>
+
