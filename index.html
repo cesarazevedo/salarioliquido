@@ -191,6 +191,256 @@
         } else if (baseCalculoIRPF <= 3751.05) {
             irpfPercentual = 15;
             irpf = baseCalculoIRPF * 0.15 - 381.44;
+        } else if (baseCalcul<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Calculadora de Salário Líquido</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #444;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 300px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .proventos {
+            color: green;
+        }
+
+        .descontos {
+            color: red;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .salario-liquido {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .currency {
+            font-size: 1.2em;
+        }
+
+        #grafico {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+   <div class="container">
+        <h2>Tabelas Informativas - INSS e IRPF (2024)</h2>
+        
+        <h3>Tabela do INSS</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Faixa Salarial</th>
+                    <th>Alíquota (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Até R$ 1.412,00</td>
+                    <td>7,5%</td>
+                </tr>
+                <tr>
+                    <td>De R$ 1.412,01 até R$ 2.666,68</td>
+                    <td>9%</td>
+                </tr>
+                <tr>
+                    <td>De R$ 2.666,69 até R$ 4.000,03</td>
+                    <td>12%</td>
+                </tr>
+                <tr>
+                    <td>De R$ 4.000,04 até R$ 7.786,02 (teto do INSS)</td>
+                    <td>14%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Tabela do IRPF</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Base de Cálculo (R$)</th>
+                    <th>Alíquota (%)</th>
+                    <th>Parcela a Deduzir (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Até R$ 2.259,20</td>
+                    <td>Isento</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>De R$ 2.259,21 até R$ 2.826,65</td>
+                    <td>7,5%</td>
+                    <td>R$ 169,44</td>
+                </tr>
+                <tr>
+                    <td>De R$ 2.826,66 até R$ 3.751,05</td>
+                    <td>15%</td>
+                    <td>R$ 381,44</td>
+                </tr>
+                <tr>
+                    <td>De R$ 3.751,06 até R$ 4.664,68</td>
+                    <td>22,5%</td>
+                    <td>R$ 662,77</td>
+                </tr>
+                <tr>
+                    <td>Acima de R$ 4.664,68</td>
+                    <td>27,5%</td>
+                    <td>R$ 896,00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<script>
+    // Função para formatar o valor monetário em real brasileiro (R$)
+    function formatarMoeda(campo) {
+        let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
+        valor = (valor / 100).toFixed(2); // Adiciona os centavos
+        valor = valor.replace(".", ","); // Substitui o ponto por vírgula
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona pontos para separar milhares
+        campo.value = "R$ " + valor; // Exibe o valor formatado no campo
+    }
+
+    // Função para formatar os números como valores monetários (R$) na saída
+    function formatarNumero(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calcularSalarioLiquido() {
+        let salarioBruto = document.getElementById("salario").value.replace(/[^\d,-]/g, "").replace(",", "."); // Remove caracteres extras e ajusta para formato numérico
+        salarioBruto = parseFloat(salarioBruto);
+
+        let inss = 0;
+        let irpf = 0;
+        let inssPercentual = 0;
+        let irpfPercentual = 0;
+        let salarioLiquido = salarioBruto;
+
+        const tetoINSS = 7786.02; // Teto do INSS para 2024
+
+        if (isNaN(salarioBruto) || salarioBruto <= 0) {
+            document.getElementById("resultado").innerHTML = "Por favor, insira um salário válido.";
+            return;
+        }
+
+        // Cálculo do INSS com base na tabela
+        if (salarioBruto <= 1412.00) {
+            inssPercentual = 7.5;
+            inss = salarioBruto * 0.075;
+        } else if (salarioBruto <= 2666.68) {
+            inssPercentual = 9;
+            inss = salarioBruto * 0.09 - 21.18;
+        } else if (salarioBruto <= 4000.03) {
+            inssPercentual = 12;
+            inss = salarioBruto * 0.12 - 101.18;
+        } else if (salarioBruto <= tetoINSS) {
+            inssPercentual = 14;
+            inss = salarioBruto * 0.14 - 181.18;
+        } else {
+            // Se o salário ultrapassar o teto do INSS, aplica o desconto sobre o teto
+            inssPercentual = 14;
+            inss = tetoINSS * 0.14 - 181.18;
+        }
+
+        // Base de cálculo do IRPF é o salário bruto menos a contribuição previdenciária (INSS)
+        const baseCalculoIRPF = salarioBruto - inss;
+
+        // Cálculo do IRPF com base na tabela de 2024
+        if (baseCalculoIRPF <= 2259.20) {
+            irpfPercentual = 0;
+            irpf = 0;
+        } else if (baseCalculoIRPF <= 2826.65) {
+            irpfPercentual = 7.5;
+            irpf = baseCalculoIRPF * 0.075 - 169.44;
+        } else if (baseCalculoIRPF <= 3751.05) {
+            irpfPercentual = 15;
+            irpf = baseCalculoIRPF * 0.15 - 381.44;
         } else if (baseCalculoIRPF <= 4664.68) {
             irpfPercentual = 22.5;
             irpf = baseCalculoIRPF * 0.225 - 662.77;
