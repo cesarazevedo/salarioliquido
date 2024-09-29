@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Calculadora de Salário Líquido</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .proventos, .descontos {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #grafico {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora de Salário Líquido</h1>
+
+    <label for="salario">Salário Bruto (R$):</label>
+    <input type="text" id="salario" placeholder="Digite o salário bruto" onkeyup="formatarMoeda(this)">
+
+    <button onclick="calcularSalarioLiquido()">Calcular Salário Líquido</button>
+
+    <div class="result" id="resultado"></div>
+    <canvas id="grafico" width="400" height="400"></canvas>
+</div>
+
+<script>
+    // Função para formatar o valor digitado como moeda
+    function formatarMoeda(campo) {
+        let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
+        valor = (valor / 100).toFixed(2) + ""; // Adiciona os centavos
+        valor = valor.replace(".", ","); // Substitui o ponto por vírgula
+        valor = valor.replace(/(\d)(?=(\d{3})+\,)/g, "$1."); // Adiciona os pontos para milhar
+        campo.value = "R$ " + valor;
+    }
+
+    function calcularSalarioLiquido() {
+        let salarioBruto = document.getElementById("salario").value.replace(/[^\d,-]/g, "").replace(",", "."); // Remove os caracteres de moeda e converte para número
+        salarioBruto = parseFloat(salarioBruto);
+
+        let inss = 0;
+        let irpf = 0;
+        let inssPercentual = 0;
+        let irpfPercentual = 0;
+        let salarioLiquido = salarioBruto;
+
+        const tetoINSS = 7786.02; // Teto do INSS para 2024
+
+        if (isNaN(salarioBruto) || salarioBruto <= 0) {
+            document.getElementById("resultado").innerHTML = "Por favor, insira um salário válido.";
+            return;
+        }
+
+        // Calcular INSS com deduções de acordo com a tabela fornecida
+        if (salarioBruto <= 1412.00) {
+            inssPercentual = 7.5;
+            inss = salarioBruto * 0.075;
+        } else if (salarioBruto <= 2666.68) {
+            inssPercentual = 9;
+            inss = salarioBruto * 0.09 - 21.18;
+        } else if (salarioBruto <= 4000.03) {
+            inssPercentual = 12;
+            inss = salarioBruto * 0.12 - 101.18;
+        } else if (salarioBruto <= tetoINSS) {
+            inssPercentual = 14;
+            inss = salarioBruto * 0.14 - 181.18;
+        } else {
+            // Se o salário ultrapassar o teto do INSS, aplica o desconto sobre o teto
+            inssPercentual = 14;
+            inss = tetoINSS * 0.14 - 181.18;
+        }
+
+        // Base de cálculo do IRPF é o salário bruto menos a contribuição previdenciária
+        const baseCalculoIRPF = salarioBruto - inss;
+
+        // Calcular IRPF com base na tabela de 2024
+        if (baseCalculoIRPF <= 2259.20) {
+            irpfPercentual = 0;
+            irpf = 0;
+        } else if (baseCalculoIRPF <= 2826.65) {
+            irpfPercentual = 7.5;
+            irpf = baseCalculoIRPF * 0.075 - 169.44;
+        } else if (baseCalculoIRPF <= 3751.05) {
+            irpfPercentual = 15;
+            irpf = baseCalculoIRPF * 0.15 - 381.44;
+        } else if (baseCalculoIRPF <= 4664.68) {
+            irpfPercentual = 22.5;
+            irpf = baseCalculoIRPF * 0.225 - 662.77;
+        } else {
+            irpfPercentual = 27.5;
+            irpf = baseCalculoIRPF * 0.275 - 896.00;
+        }
+
+        salarioLiquido -= (inss + irpf);
+
+        const totalDescontos = inss + irpf;
+
+        // Exibir resultado com resumo de proventos e descontos
+        document.getElementById("resultado").innerHTML = `
+            <div class="proventos">💼 Proventos: R$ ${salarioBruto.toFixed(2)}</div>
+            <div>Salário bruto: R$ ${salarioBruto.toFixed(2)}</div>
+            <div class="descontos">📉 Descontos: R$ ${totalDescontos.toFixed(2)}</div>
+            <div>INSS (${inssPercentual}%): R$ ${inss.toFixed(2)}</div>
+            <div>IRPF (${irpfPercentual}%): R$ ${irpf.toFixed(2)}</div>
+            <div>Outros descontos: R$ 0,00</div>
+        `;
+
+        // Criar gráfico de pizza
+        const ctx = document.getElementById('grafico').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Proventos', 'Descontos'],
+                datasets: [{
+                    data: [salarioBruto, totalDescontos],
+                    backgroundColor: ['#36a2eb', '#ff6384'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
