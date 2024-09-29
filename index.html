@@ -102,12 +102,12 @@
 </div>
 
 <script>
-    // Função para formatar o valor digitado como moeda com separador de milhar
+    // Função para formatar o valor digitado como moeda com separador de milhar e decimal
     function formatarMoeda(campo) {
         let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
         valor = (valor / 100).toFixed(2) + ""; // Adiciona os centavos
-        valor = valor.replace(".", ","); // Substitui o ponto por vírgula
         valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona os pontos para milhar
+        valor = valor.replace(".", ","); // Adiciona a vírgula para os centavos
         campo.value = "R$ " + valor;
     }
 
@@ -215,5 +215,3 @@
 
 </body>
 </html>
-
-
