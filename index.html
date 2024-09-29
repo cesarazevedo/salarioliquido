@@ -34,15 +34,16 @@
         }
 
         input, select {
-            width: 100%;
+            width: 300px; /* Ajuste do tamanho do campo */
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px; /* Ajuste do tamanho da fonte */
         }
 
         button {
-            width: 100%;
+            width: 300px; /* Ajuste do tamanho do botão */
             padding: 10px;
             background-color: #007bff;
             color: #fff;
@@ -106,13 +107,13 @@
         let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
         valor = (valor / 100).toFixed(2) + ""; // Adiciona os centavos
         valor = valor.replace(".", ","); // Substitui o ponto por vírgula
-        valor = valor.replace(/(\d)(?=(\d{3})+\,)/g, "$1."); // Adiciona os pontos para milhar
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona os pontos para milhar
         campo.value = "R$ " + valor;
     }
 
     // Função para formatar números em moeda (separador de milhar)
     function formatarNumero(valor) {
-        return valor.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace(".", ",");
+        return valor.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.').replace(".", ",");
     }
 
     function calcularSalarioLiquido() {
@@ -214,4 +215,5 @@
 
 </body>
 </html>
+
 
