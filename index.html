@@ -862,78 +862,86 @@
         </section>
 
         <!-- 13º Salário Section -->
-        <section id="13-salario" class="section">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <i class="fas fa-gift"></i>
-                    Calculadora do 13º Salário
-                </h2>
-                <p class="section-description">Calcule a 1ª e 2ª parcela do 13º salário com impostos corretos</p>
-            </div>
-
-            <div class="calculator-container">
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="salario13">
-                            <i class="fas fa-dollar-sign"></i>
-                            Salário Base do 13º
-                        </label>
-                        <input type="text" id="salario13" placeholder="0,00" value="R$ 0,00">
-                        <span class="error-message" id="errorSalario13"></span>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="mesesTrabalhados13">
-                            <i class="fas fa-calendar"></i>
-                            Meses Trabalhados no Ano
-                        </label>
-                        <input type="number" id="mesesTrabalhados13" placeholder="12" value="12" min="0" max="12">
-                        <span class="error-message" id="errorMesesTrabalhados13"></span>
-                    </div>
-                </div>
-
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="dependentes13">
-                            <i class="fas fa-users"></i>
-                            Número de Dependentes
-                        </label>
-                        <select id="dependentes13">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5+</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="primeiraParcelaRecebida">
-                            <i class="fas fa-hand-holding-usd"></i>
-                            1ª Parcela já Recebida
-                        </label>
-                        <input type="text" id="primeiraParcelaRecebida" placeholder="0,00" value="R$ 0,00">
-                        <span class="error-message" id="errorPrimeiraParcelaRecebida"></span>
-                    </div>
-                </div>
-
-                <div class="button-group">
-                    <button class="btn btn-primary" onclick="calcular13Salario()">
-                        <i class="fas fa-calculator"></i> Calcular 13º Salário
-                    </button>
-                    <button class="btn btn-secondary" onclick="limparCampos()">
-                        <i class="fas fa-eraser"></i> Limpar
-                    </button>
-                </div>
-
-                <div class="result-section" id="resultado13Salario" style="display: none;">
-                    <h3><i class="fas fa-gift"></i> Resultado do 13º Salário</h3>
-                    <div id="trezeDetalhes"></div>
-                </div>
-            </div>
-        </section>
+<section id="13-salario" class="section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-gift"></i>
+            Calculadora do 13º Salário
+        </h2>
+        <p class="section-description">Calcule a 1ª e 2ª parcela do 13º salário com impostos corretos</p>
     </div>
+
+    <div class="calculator-container">
+        <div class="input-row">
+            <div class="input-group">
+                <label for="tipoCalculo13">
+                    <i class="fas fa-list"></i>
+                    Que parcela calcular?
+                </label>
+                <select id="tipoCalculo13">
+                    <option value="primeira">1ª Parcela (sem impostos)</option>
+                    <option value="segunda">2ª Parcela (com impostos)</option>
+                    <option value="ambas">Ambas as parcelas</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="salario13">
+                    <i class="fas fa-dollar-sign"></i>
+                    Salário Base do 13º
+                </label>
+                <input type="text" id="salario13" placeholder="0,00" value="R$ 0,00">
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-group">
+                <label for="mesesTrabalhados13">
+                    <i class="fas fa-calendar"></i>
+                    Meses Trabalhados no Ano
+                </label>
+                <input type="number" id="mesesTrabalhados13" placeholder="12" value="12" min="0" max="12">
+            </div>
+
+            <div class="input-group">
+                <label for="dependentes13">
+                    <i class="fas fa-users"></i>
+                    Número de Dependentes
+                </label>
+                <select id="dependentes13">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5+</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group" id="primeiraParcelaGroup" style="display: none;">
+            <label for="primeiraParcelaRecebida">
+                <i class="fas fa-hand-holding-usd"></i>
+                1ª Parcela já Recebida (para calcular a 2ª)
+            </label>
+            <input type="text" id="primeiraParcelaRecebida" placeholder="0,00" value="R$ 0,00">
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="calcular13Salario()">
+                <i class="fas fa-calculator"></i> Calcular 13º Salário
+            </button>
+            <button class="btn btn-secondary" onclick="limparCampos()">
+                <i class="fas fa-eraser"></i> Limpar
+            </button>
+        </div>
+
+        <div class="result-section" id="resultado13Salario" style="display: none;">
+            <h3><i class="fas fa-gift"></i> Resultado do 13º Salário</h3>
+            <div id="trezeDetalhes"></div>
+        </div>
+    </div>
+</section>
 
     <!-- Notification -->
     <div id="notification" class="notification">
@@ -1377,6 +1385,74 @@
             document.getElementById('resultadoFerias').style.display = 'block';
             showNotification('Férias calculadas com sucesso!');
         }
+		
+		function calcular13Salario() {
+			const salario = parseMoeda(document.getElementById('salario13').value);
+			const mesesTrabalhados = parseInt(document.getElementById('mesesTrabalhados13').value) || 12;
+			const dependentes = parseInt(document.getElementById('dependentes13').value) || 0;
+			const primeiraParcelaRecebida = parseMoeda(document.getElementById('primeiraParcelaRecebida').value);
+
+    if (salario <= 0) {
+        showNotification('Digite um salário válido!');
+        return;
+    }
+
+    // Cálculo do 13º proporcional
+    const decimoTerceiroBruto = (salario / 12) * mesesTrabalhados;
+    
+    // 1ª Parcela (50% sem impostos)
+    const primeiraParcela = decimoTerceiroBruto / 2;
+    
+    // 2ª Parcela - Base para impostos é o valor total
+    const inss13 = calcularINSS(decimoTerceiroBruto);
+    const irrf13 = calcularIRRF(decimoTerceiroBruto - inss13, dependentes);
+    
+    // 2ª Parcela líquida
+    const segundaParcelaLiquida = decimoTerceiroBruto - primeiraParcelaRecebida - inss13 - irrf13;
+    
+    // Total líquido
+    const totalLiquido = primeiraParcela + segundaParcelaLiquida;
+
+    // Exibir resultados
+    const detalhesDiv = document.getElementById('trezeDetalhes');
+    detalhesDiv.innerHTML = `
+        <div class="result-item">
+            <span class="result-label">13º Salário Bruto Total:</span>
+            <span class="result-value">${formatarMoeda(decimoTerceiroBruto)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">1ª Parcela (50% - sem impostos):</span>
+            <span class="result-value">${formatarMoeda(primeiraParcela)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">1ª Parcela já Recebida:</span>
+            <span class="result-value">${formatarMoeda(primeiraParcelaRecebida)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">Base de Cálculo INSS:</span>
+            <span class="result-value">${formatarMoeda(decimoTerceiroBruto)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">Desconto INSS 13º:</span>
+            <span class="result-value">${formatarMoeda(inss13)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">Desconto IRRF 13º:</span>
+            <span class="result-value">${formatarMoeda(irrf13)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">2ª Parcela Líquida:</span>
+            <span class="result-value">${formatarMoeda(segundaParcelaLiquida)}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">Total Líquido (1ª + 2ª):</span>
+            <span class="result-value">${formatarMoeda(totalLiquido)}</span>
+        </div>
+    `;
+
+    document.getElementById('resultado13Salario').style.display = 'block';
+    showNotification('13º Salário calculado com sucesso!');
+}
 
         // ===============================================
         // INICIALIZAÇÃO
