@@ -1,526 +1,583 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta name="google-site-verification" content="IuDPNYR_exgz24QCZ5_qKQjGRp2WQvwpXacMNzXSW5s" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Calculadora de Salário Líquido</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Calculadora de Salário e Benefícios</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column; /* Para empilhar as calculadoras */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
+            color: #333;
+            padding: 20px; /* Espaçamento geral */
+            box-sizing: border-box; /* Inclui padding no tamanho total */
         }
 
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .calculator-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.8s ease-out;
+            margin-bottom: 30px; /* Espaço entre as calculadoras */
         }
 
-        h1 {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
             text-align: center;
-            color: #444;
+            color: #4CAF50; /* Um verde vibrante */
+            margin-bottom: 30px;
+            font-weight: 600;
         }
 
-        label {
-            font-weight: bold;
+        .input-group {
+            margin-bottom: 20px;
         }
 
-        input, select {
-            width: 300px;
-            padding: 10px;
-            margin: 10px 0;
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .input-group input[type="text"], /* Mudado para text para facilitar a formatação */
+        .input-group input[type="number"],
+        .input-group select {
+            width: calc(100% - 20px); /* Ajuste para padding */
+            padding: 12px 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box; /* Garante que padding e border não aumentem o tamanho */
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="number"]:focus,
+        .input-group select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        /* Flexbox para inputs lado a lado */
+        .input-row {
+            display: flex;
+            gap: 20px; /* Espaço entre os elementos */
+            margin-bottom: 20px;
+        }
+        .input-row .input-group {
+            flex: 1; /* Faz com que os grupos de input ocupem o espaço igualmente */
+            margin-bottom: 0; /* Remove a margem padrão para usar o gap do row */
+        }
+        /* Ajuste para inputs menores em linha */
+        .input-row .input-group input,
+        .input-row .input-group select {
+            width: 100%; /* Ocupa a largura total do seu flex item */
+        }
+
+
+        .result-section {
+            background-color: #e8f5e9; /* Um verde bem clarinho */
+            border-left: 5px solid #4CAF50;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .result-section p {
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .result-section span {
+            font-weight: 600;
+            color: #2e7d32; /* Um verde mais escuro para o valor */
         }
 
         button {
-            width: 300px;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 1.1em;
             cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #43A047; /* Um verde um pouco mais escuro */
+            transform: translateY(-2px);
         }
 
-        .result {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f1f1f1;
-            border-radius: 10px;
+        button:active {
+            transform: translateY(0);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+        /* Tooltip style */
+        .tooltip-icon {
+            cursor: help;
+            margin-left: 5px;
+            color: #888;
+            font-size: 0.9em;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
+        .tooltip {
+            position: relative;
+            display: inline-block;
         }
 
-        th, td {
-            padding: 12px;
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 180px;
+            background-color: #555;
+            color: #fff;
             text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Posição acima do ícone */
+            left: 50%;
+            margin-left: -90px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8em;
         }
 
-        th {
-            background-color: #f4f4f4;
-            font-weight: bold;
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
         }
 
-        .proventos {
-            color: green;
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
 
-        .descontos {
-            color: red;
+        /* Estilos específicos para a calculadora de Férias/13º */
+        .holiday-thirteenth-calc {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee; /* Separador visual */
         }
-
-        .total {
-            font-weight: bold;
+        .holiday-thirteenth-calc .input-group {
+            margin-bottom: 15px;
         }
-
-        .salario-liquido {
-            font-size: 24px;
-            font-weight: bold;
-            color: #28a745;
-            margin-top: 20px;
-            text-align: center;
+        .holiday-thirteenth-calc .input-group label {
+             margin-bottom: 5px;
         }
-
-        .currency {
-            font-size: 1.2em;
-        }
-
-        #grafico {
-            margin-top: 20px;
+        .final-liquid-value {
+            font-size: 1.4em !important;
+            font-weight: 700 !important;
+            color: #1b5e20 !important; /* Um verde mais forte */
         }
     </style>
 </head>
 <body>
+    <div class="calculator-container">
+        <h1>Calculadora de Salário Líquido</h1>
 
-<div class="container">
-    <h1>Calculadora de Salário Líquido</h1>
+        <div class="input-group">
+            <label for="salarioBruto">
+                Salário Bruto
+                <span class="tooltip tooltip-icon">&#9432;
+                    <span class="tooltiptext">Valor total antes dos descontos.</span>
+                </span>
+            </label>
+            <input type="text" id="salarioBruto" placeholder="0,00" value="0,00">
+        </div>
 
-    <label for="salario">Salário Bruto (R$):</label>
-    <input type="text" id="salario" placeholder="Digite o salário bruto" onkeyup="formatarMoeda(this)">
+        <div class="input-group">
+            <label for="dependentes">
+                Número de Dependentes
+                <span class="tooltip tooltip-icon">&#9432;
+                    <span class="tooltiptext">Pessoas que dependem de você financeiramente.</span>
+                </span>
+            </label>
+            <select id="dependentes">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5+</option>
+            </select>
+        </div>
 
-    <button onclick="calcularSalarioLiquido()">Calcular</button>
+        <div class="input-group">
+            <label for="outrosDescontos">
+                Outros Descontos
+                <span class="tooltip tooltip-icon">&#9432;
+                    <span class="tooltiptext">Ex: Vale-transporte, plano de saúde, empréstimos.</span>
+                </span>
+            </label>
+            <input type="text" id="outrosDescontos" placeholder="0,00" value="0,00">
+        </div>
 
-    <div class="result" id="resultado"></div>
-    <canvas id="grafico" width="400" height="400"></canvas>
-</div>
+        <div class="input-group">
+            <label for="beneficios">
+                Benefícios (Não tributáveis)
+                <span class="tooltip tooltip-icon">&#9432;
+                    <span class="tooltiptext">Ex: Vale-alimentação, vale-refeição (geralmente não contam para impostos).</span>
+                </span>
+            </label>
+            <input type="text" id="beneficios" placeholder="0,00" value="0,00">
+        </div>
 
-<script>
-    // Função para formatar o valor monetário em real brasileiro (R$)
-    function formatarMoeda(campo) {
-        let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
-        valor = (valor / 100).toFixed(2); // Adiciona os centavos
-        valor = valor.replace(".", ","); // Substitui o ponto por vírgula
-        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona pontos para separar milhares
-        campo.value = "R$ " + valor; // Exibe o valor formatado no campo
-    }
+        <button onclick="calcularSalario()">Calcular Salário Líquido</button>
 
-    // Função para formatar os números como valores monetários (R$) na saída
-    function formatarNumero(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function calcularSalarioLiquido() {
-        let salarioBruto = document.getElementById("salario").value.replace(/[^\d,-]/g, "").replace(",", "."); // Remove caracteres extras e ajusta para formato numérico
-        salarioBruto = parseFloat(salarioBruto);
-
-        let inss = 0;
-        let irpf = 0;
-        let inssPercentual = 0;
-        let irpfPercentual = 0;
-        let salarioLiquido = salarioBruto;
-
-        const tetoINSS = 7786.02; // Teto do INSS para 2024
-
-        if (isNaN(salarioBruto) || salarioBruto <= 0) {
-            document.getElementById("resultado").innerHTML = "Por favor, insira um salário válido.";
-            return;
-        }
-
-        // Cálculo do INSS com base na tabela
-        if (salarioBruto <= 1412.00) {
-            inssPercentual = 7.5;
-            inss = salarioBruto * 0.075;
-        } else if (salarioBruto <= 2666.68) {
-            inssPercentual = 9;
-            inss = salarioBruto * 0.09 - 21.18;
-        } else if (salarioBruto <= 4000.03) {
-            inssPercentual = 12;
-            inss = salarioBruto * 0.12 - 101.18;
-        } else if (salarioBruto <= tetoINSS) {
-            inssPercentual = 14;
-            inss = salarioBruto * 0.14 - 181.18;
-        } else {
-            // Se o salário ultrapassar o teto do INSS, aplica o desconto sobre o teto
-            inssPercentual = 14;
-            inss = tetoINSS * 0.14 - 181.18;
-        }
-
-        // Base de cálculo do IRPF é o salário bruto menos a contribuição previdenciária (INSS)
-        const baseCalculoIRPF = salarioBruto - inss;
-
-        // Cálculo do IRPF com base na tabela de 2024
-        if (baseCalculoIRPF <= 2259.20) {
-            irpfPercentual = 0;
-            irpf = 0;
-        } else if (baseCalculoIRPF <= 2826.65) {
-            irpfPercentual = 7.5;
-            irpf = baseCalculoIRPF * 0.075 - 169.44;
-        } else if (baseCalculoIRPF <= 3751.05) {
-            irpfPercentual = 15;
-            irpf = baseCalculoIRPF * 0.15 - 381.44;
-        } else if (baseCalcul<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Calculadora de Salário Líquido</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2, h3 {
-            text-align: center;
-            color: #444;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 300px;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button {
-            width: 300px;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #f4f4f4;
-            font-weight: bold;
-        }
-
-        .proventos {
-            color: green;
-        }
-
-        .descontos {
-            color: red;
-        }
-
-        .total {
-            font-weight: bold;
-        }
-
-        .salario-liquido {
-            font-size: 24px;
-            font-weight: bold;
-            color: #28a745;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .currency {
-            font-size: 1.2em;
-        }
-
-        #grafico {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-
-   <div class="container">
-        <h2>Tabelas Informativas - INSS e IRPF (2024)</h2>
-        
-        <h3>Tabela do INSS</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Faixa Salarial</th>
-                    <th>Alíquota (%)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Até R$ 1.412,00</td>
-                    <td>7,5%</td>
-                </tr>
-                <tr>
-                    <td>De R$ 1.412,01 até R$ 2.666,68</td>
-                    <td>9%</td>
-                </tr>
-                <tr>
-                    <td>De R$ 2.666,69 até R$ 4.000,03</td>
-                    <td>12%</td>
-                </tr>
-                <tr>
-                    <td>De R$ 4.000,04 até R$ 7.786,02 (teto do INSS)</td>
-                    <td>14%</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>Tabela do IRPF</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Base de Cálculo (R$)</th>
-                    <th>Alíquota (%)</th>
-                    <th>Parcela a Deduzir (R$)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Até R$ 2.259,20</td>
-                    <td>Isento</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>De R$ 2.259,21 até R$ 2.826,65</td>
-                    <td>7,5%</td>
-                    <td>R$ 169,44</td>
-                </tr>
-                <tr>
-                    <td>De R$ 2.826,66 até R$ 3.751,05</td>
-                    <td>15%</td>
-                    <td>R$ 381,44</td>
-                </tr>
-                <tr>
-                    <td>De R$ 3.751,06 até R$ 4.664,68</td>
-                    <td>22,5%</td>
-                    <td>R$ 662,77</td>
-                </tr>
-                <tr>
-                    <td>Acima de R$ 4.664,68</td>
-                    <td>27,5%</td>
-                    <td>R$ 896,00</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="result-section" id="resultado" style="display: none;">
+            <p>Salário Bruto: <span id="displaySalarioBruto"></span></p>
+            <p>Desconto INSS: <span id="displayINSS"></span></p>
+            <p>Desconto IRRF: <span id="displayIRRF"></span></p>
+            <p>Outros Descontos: <span id="displayOutrosDescontos"></span></p>
+            <p>Benefícios: <span id="displayBeneficios"></span></p>
+            <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+            <p style="font-size: 1.3em;">Salário Líquido: <span id="salarioLiquidoDisplay" style="color: #2e7d32;"></span></p>
+        </div>
     </div>
-<script>
-    // Função para formatar o valor monetário em real brasileiro (R$)
-    function formatarMoeda(campo) {
-        let valor = campo.value.replace(/\D/g, ""); // Remove todos os caracteres que não são dígitos
-        valor = (valor / 100).toFixed(2); // Adiciona os centavos
-        valor = valor.replace(".", ","); // Substitui o ponto por vírgula
-        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona pontos para separar milhares
-        campo.value = "R$ " + valor; // Exibe o valor formatado no campo
-    }
 
-    // Função para formatar os números como valores monetários (R$) na saída
-    function formatarNumero(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
+    <div class="calculator-container holiday-thirteenth-calc">
+        <h2>Calculadora de Férias e 13º Salário</h2>
 
-    function calcularSalarioLiquido() {
-        let salarioBruto = document.getElementById("salario").value.replace(/[^\d,-]/g, "").replace(",", "."); // Remove caracteres extras e ajusta para formato numérico
-        salarioBruto = parseFloat(salarioBruto);
-
-        let inss = 0;
-        let irpf = 0;
-        let inssPercentual = 0;
-        let irpfPercentual = 0;
-        let salarioLiquido = salarioBruto;
-
-        const tetoINSS = 7786.02; // Teto do INSS para 2024
-
-        if (isNaN(salarioBruto) || salarioBruto <= 0) {
-            document.getElementById("resultado").innerHTML = "Por favor, insira um salário válido.";
-            return;
-        }
-
-        // Cálculo do INSS com base na tabela
-        if (salarioBruto <= 1412.00) {
-            inssPercentual = 7.5;
-            inss = salarioBruto * 0.075;
-        } else if (salarioBruto <= 2666.68) {
-            inssPercentual = 9;
-            inss = salarioBruto * 0.09 - 21.18;
-        } else if (salarioBruto <= 4000.03) {
-            inssPercentual = 12;
-            inss = salarioBruto * 0.12 - 101.18;
-        } else if (salarioBruto <= tetoINSS) {
-            inssPercentual = 14;
-            inss = salarioBruto * 0.14 - 181.18;
-        } else {
-            // Se o salário ultrapassar o teto do INSS, aplica o desconto sobre o teto
-            inssPercentual = 14;
-            inss = tetoINSS * 0.14 - 181.18;
-        }
-
-        // Base de cálculo do IRPF é o salário bruto menos a contribuição previdenciária (INSS)
-        const baseCalculoIRPF = salarioBruto - inss;
-
-        // Cálculo do IRPF com base na tabela de 2024
-        if (baseCalculoIRPF <= 2259.20) {
-            irpfPercentual = 0;
-            irpf = 0;
-        } else if (baseCalculoIRPF <= 2826.65) {
-            irpfPercentual = 7.5;
-            irpf = baseCalculoIRPF * 0.075 - 169.44;
-        } else if (baseCalculoIRPF <= 3751.05) {
-            irpfPercentual = 15;
-            irpf = baseCalculoIRPF * 0.15 - 381.44;
-        } else if (baseCalculoIRPF <= 4664.68) {
-            irpfPercentual = 22.5;
-            irpf = baseCalculoIRPF * 0.225 - 662.77;
-        } else {
-            irpfPercentual = 27.5;
-            irpf = baseCalculoIRPF * 0.275 - 896.00;
-        }
-
-        // Cálculo do salário líquido
-        salarioLiquido -= (inss + irpf);
-        const totalDescontos = inss + irpf;
-
-        // Exibe o resultado na tabela
-        document.getElementById("resultado").innerHTML = `
-            <h2>Resultado</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Alíquota</th>
-                        <th>Proventos</th>
-                        <th>Descontos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Salário Bruto</td>
-                        <td>-</td>
-                        <td class="proventos">${formatarNumero(salarioBruto)}</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>INSS</td>
-                        <td>${inssPercentual}%</td>
-                        <td>-</td>
-                        <td class="descontos">${formatarNumero(inss)}</td>
-                    </tr>
-                    <tr>
-                        <td>IRPF</td>
-                        <td>${irpfPercentual}%</td>
-                        <td>-</td>
-                        <td class="descontos">${formatarNumero(irpf)}</td>
-                    </tr>
-                    <tr class="total">
-                        <td>Total</td>
-                        <td>-</td>
-                        <td class="proventos">${formatarNumero(salarioBruto)}</td>
-                        <td class="descontos">${formatarNumero(totalDescontos)}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="salario-liquido">
-                Valor do Salário Líquido: ${formatarNumero(salarioLiquido)}
+        <div class="input-row">
+            <div class="input-group">
+                <label for="feriasSalarioBruto">
+                    Salário Bruto (Férias)
+                    <span class="tooltip tooltip-icon">&#9432;
+                        <span class="tooltiptext">Seu salário base para o cálculo das férias.</span>
+                    </span>
+                </label>
+                <input type="text" id="feriasSalarioBruto" placeholder="0,00" value="0,00">
             </div>
-        `;
 
-        // Criar gráfico de pizza
-        const ctx = document.getElementById('grafico').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Proventos', 'Descontos'],
-                datasets: [{
-                    data: [salarioBruto, totalDescontos],
-                    backgroundColor: ['#36a2eb', '#ffce56'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    }
+            <div class="input-group">
+                <label for="horasExtrasFerias">
+                    Horas Extras (se houver)
+                    <span class="tooltip tooltip-icon">&#9432;
+                        <span class="tooltiptext">Média das horas extras que serão pagas nas férias.</span>
+                    </span>
+                </label>
+                <input type="text" id="horasExtrasFerias" placeholder="0,00" value="0,00">
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-group">
+                <label for="diasFerias">
+                    Dias de Férias
+                    <span class="tooltip tooltip-icon">&#9432;
+                        <span class="tooltiptext">Número de dias de férias a serem tirados (até 30).</span>
+                    </span>
+                </label>
+                <input type="number" id="diasFerias" placeholder="0" value="30" min="1" max="30">
+            </div>
+
+            <div class="input-group">
+                <label for="dependentesFerias">
+                    Número de Dependentes (Férias)
+                    <span class="tooltip tooltip-icon">&#9432;
+                        <span class="tooltiptext">Dependentes para o cálculo do IRRF sobre as férias.</span>
+                    </span>
+                </label>
+                <select id="dependentesFerias">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5+</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-group">
+                <label for="abonoPecuniario">
+                    Abono Pecuniário (Vender Férias)
+                    <span class="tooltip tooltip-icon">&#9432;
+                        <span class="tooltiptext">Converter 1/3 das férias em dinheiro. Esse valor não tem INSS e IRRF.</span>
+                    </span>
+                </label>
+                <select id="abonoPecuniario">
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="adiantar13Ferias">
+                    Adiantar 1ª Parcela 13º
+                    <span class="tooltip tooltip-icon">&#9432;
+                        <span class="tooltiptext">Receber a primeira parcela do 13º Salário junto com as férias.</span>
+                    </span>
+                </label>
+                <select id="adiantar13Ferias">
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="mesesTrabalhados13Ferias"> Meses Trabalhados no Ano (para 13º)
+                <span class="tooltip tooltip-icon">&#9432;
+                    <span class="tooltiptext">Número de meses completos trabalhados no ano para o cálculo do 13º salário.</span>
+                </span>
+            </label>
+            <input type="number" id="mesesTrabalhados13Ferias" placeholder="0" value="12" min="0" max="12">
+        </div>
+
+        <button onclick="calcularFerias13()">Calcular Férias e 13º Salário</button>
+
+        <div class="result-section" id="resultadoFerias13" style="display: none;">
+            <h3>Detalhes das Férias:</h3>
+            <p>Valor Salário Férias: <span id="displayValorSalarioFerias"></span></p>
+            <p>Valor 1/3 Férias: <span id="displayUmTercoFerias"></span></p>
+            <p>Valor Abono Pecuniário (1/3) + 1/3: <span id="displayAbonoPecuniario"></span></p>
+            <p>Total Bruto Férias: <span id="displayFeriasTotalBruto"></span></p>
+            <p>Desconto INSS Férias: <span id="displayINSSFerias"></span></p>
+            <p>Desconto IRRF Férias: <span id="displayIRRFFerias"></span></p>
+            <p>Valor Líquido das Férias: <span id="displayFeriasLiquido"></span></p>
+
+            <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+
+            <h3>Detalhes 13º Salário (1ª Parcela):</h3>
+            <p>13º Salário Bruto: <span id="displayDecimoTerceiroPrimeiraParcela"></span></p>
+            <p>Desconto INSS 13º: <span id="displayINSSDecimoTerceiro"></span></p>
+            <p>Desconto IRRF 13º: <span id="displayIRRFDecimoTerceiro"></span></p>
+            <p>13º Salário Líquido: <span id="displayDecimoTerceiroLiquido"></span></p>
+
+            <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+            <p style="font-size: 1.3em;">Total a Receber (Férias + 13º): <span id="displayTotalReceberFerias13" class="final-liquid-value"></span></p>
+        </div>
+    </div>
+
+
+    <script>
+        // Funções de formatação de moeda
+        function formatarMoeda(valor) {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function parseMoeda(texto) {
+            const valorLimpo = texto.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+            return parseFloat(valorLimpo) || 0;
+        }
+
+        // Adiciona listeners para formatar os inputs APENAS ao sair do foco (blur)
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                let valorNumerico = parseMoeda(this.value);
+                if (valorNumerico === 0 && this.value.trim() === "") {
+                    this.value = formatarMoeda(0);
+                } else {
+                    this.value = formatarMoeda(valorNumerico);
+                }
+            });
+
+            // Adiciona listener para remover a formatação quando o campo recebe foco
+            input.addEventListener('focus', function() {
+                this.value = this.value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+                if (parseFloat(this.value) === 0) {
+                    this.value = "";
+                }
+            });
+
+            // Formata o valor inicial ao carregar a página
+            let valorNumericoInicial = parseMoeda(input.value);
+            input.value = formatarMoeda(valorNumericoInicial);
+        });
+
+
+        // Funções de cálculo de INSS e IRRF reutilizáveis
+        function calcularINSS(baseCalculoINSS) {
+            const tabelaINSS = [
+                { limite: 1518.00, aliquota: 7.5, parcelaDeducao: 0.00 },
+                { limite: 2793.88, aliquota: 9.0, parcelaDeducao: 22.77 },
+                { limite: 4190.83, aliquota: 12.0, parcelaDeducao: 106.59 },
+                { limite: 8157.41, aliquota: 14.0, parcelaDeducao: 190.40 }
+            ];
+            const tetoDescontoINSS = 951.62;
+
+            let inss = 0;
+            for (let i = 0; i < tabelaINSS.length; i++) {
+                if (baseCalculoINSS <= tabelaINSS[i].limite) {
+                    inss = (baseCalculoINSS * (tabelaINSS[i].aliquota / 100)) - tabelaINSS[i].parcelaDeducao;
+                    break;
+                }
+                if (i === tabelaINSS.length - 1) {
+                     inss = (baseCalculoINSS * (tabelaINSS[i].aliquota / 100)) - tabelaINSS[i].parcelaDeducao;
                 }
             }
-        });
-    }
-</script>
+            return Math.min(Math.max(0, inss), tetoDescontoINSS); // Garante que não seja negativo e respeita o teto
+        }
 
+        function calcularIRRF(baseCalculoIRRF, numDependentes) {
+            const tabelaIRRF = [
+                { baseCalculoLimite: 2428.80, aliquota: 0.0, parcelaDeducao: 0.00 },
+                { baseCalculoLimite: 2826.65, aliquota: 7.5, parcelaDeducao: 182.16 },
+                { baseCalculoLimite: 3751.05, aliquota: 15.0, parcelaDeducao: 394.16 },
+                { baseCalculoLimite: 4664.68, aliquota: 22.5, parcelaDeducao: 675.49 },
+                { baseCalculoLimite: Infinity, aliquota: 27.5, parcelaDeducao: 908.73 }
+            ];
+            const deducaoPorDependenteIRRF = 189.59;
+
+            let baseLiquidaIRRF = baseCalculoIRRF - (numDependentes * deducaoPorDependenteIRRF);
+            let irrf = 0;
+
+            for (let i = 0; i < tabelaIRRF.length; i++) {
+                if (baseLiquidaIRRF <= tabelaIRRF[i].baseCalculoLimite) {
+                    irrf = (baseLiquidaIRRF * (tabelaIRRF[i].aliquota / 100)) - tabelaIRRF[i].parcelaDeducao;
+                    break;
+                }
+                if (i === tabelaIRRF.length - 1) {
+                    irrf = (baseLiquidaIRRF * (tabelaIRRF[i].aliquota / 100)) - tabelaIRRF[i].parcelaDeducao;
+                }
+            }
+            return Math.max(0, irrf); // Garante que não seja negativo
+        }
+
+
+        // ===============================================
+        // Funções de Cálculo do Salário Líquido
+        // ===============================================
+        function calcularSalario() {
+            const salarioBruto = parseMoeda(document.getElementById('salarioBruto').value);
+            const numDependentes = parseInt(document.getElementById('dependentes').value) || 0;
+            const outrosDescontos = parseMoeda(document.getElementById('outrosDescontos').value);
+            const beneficios = parseMoeda(document.getElementById('beneficios').value);
+
+            const inss = calcularINSS(salarioBruto);
+            const irrf = calcularIRRF(salarioBruto - inss, numDependentes);
+
+            const salarioLiquido = salarioBruto - inss - irrf - outrosDescontos + beneficios;
+
+            document.getElementById('displaySalarioBruto').textContent = formatarMoeda(salarioBruto);
+            document.getElementById('displayINSS').textContent = formatarMoeda(inss);
+            document.getElementById('displayIRRF').textContent = formatarMoeda(irrf);
+            document.getElementById('displayOutrosDescontos').textContent = formatarMoeda(outrosDescontos);
+            document.getElementById('displayBeneficios').textContent = formatarMoeda(beneficios);
+            document.getElementById('salarioLiquidoDisplay').textContent = formatarMoeda(salarioLiquido);
+
+            document.getElementById('resultado').style.display = 'block';
+        }
+
+        // ===============================================
+        // Funções de Cálculo de Férias e 13º Salário (CORRIGIDA NOVAMENTE)
+        // ===============================================
+        function calcularFerias13() {
+            const feriasSalarioBruto = parseMoeda(document.getElementById('feriasSalarioBruto').value);
+            const horasExtrasFerias = parseMoeda(document.getElementById('horasExtrasFerias').value);
+            const diasFerias = parseInt(document.getElementById('diasFerias').value) || 0;
+            const dependentesFerias = parseInt(document.getElementById('dependentesFerias').value) || 0;
+            const abonoPecuniarioOpcao = document.getElementById('abonoPecuniario').value;
+            const adiantar13FeriasOpcao = document.getElementById('adiantar13Ferias').value;
+            const mesesTrabalhados13Ferias = parseInt(document.getElementById('mesesTrabalhados13Ferias').value) || 0; // Pegando o valor do campo correto
+
+            // --- CÁLCULO DAS FÉRIAS ---
+            let salarioBaseComHE = feriasSalarioBruto + horasExtrasFerias;
+            
+            // Valor do salário proporcional aos dias de férias (sem HE adicional para essa base)
+            let valorSalarioFeriasProporcional = (feriasSalarioBruto / 30) * diasFerias;
+            // Valor das horas extras proporcional aos dias de férias
+            let valorHorasExtrasFeriasProporcional = (horasExtrasFerias / 30) * diasFerias;
+            
+            let umTercoFeriasProporcional = (valorSalarioFeriasProporcional + valorHorasExtrasFeriasProporcional) / 3;
+
+            let valorAbonoPecuniarioBruto = 0;
+            let totalBrutoFeriasTributavel = 0; // Valor que incidirá INSS e IRRF
+
+            if (abonoPecuniarioOpcao === 'sim') {
+                const diasAbono = diasFerias / 3;
+                const salarioDiaBaseAbono = (feriasSalarioBruto + horasExtrasFerias) / 30; // Base diária para o abono
+                valorAbonoPecuniarioBruto = (salarioDiaBaseAbono * diasAbono) + ((salarioDiaBaseAbono * diasAbono) / 3);
+
+                // O que será pago como férias (2/3 dos dias)
+                let diasUteisFerias = diasFerias - diasAbono;
+                let salarioFeriasReal = (feriasSalarioBruto / 30) * diasUteisFerias;
+                let heFeriasReal = (horasExtrasFerias / 30) * diasUteisFerias;
+                totalBrutoFeriasTributavel = salarioFeriasReal + heFeriasReal + (salarioFeriasReal + heFeriasReal) / 3;
+
+            } else {
+                totalBrutoFeriasTributavel = valorSalarioFeriasProporcional + valorHorasExtrasFeriasProporcional + umTercoFeriasProporcional;
+            }
+
+            // Descontos sobre Férias (APENAS sobre a parcela tributável)
+            const inssFerias = calcularINSS(totalBrutoFeriasTributavel);
+            const irrfFerias = calcularIRRF(totalBrutoFeriasTributavel - inssFerias, dependentesFerias);
+
+            let feriasLiquido = totalBrutoFeriasTributavel - inssFerias - irrfFerias + valorAbonoPecuniarioBruto; // Abono é somado, pois é isento.
+
+            // --- CÁLCULO DO 13º SALÁRIO (PRIMEIRA PARCELA) ---
+            let decimoTerceiroPrimeiraParcelaBruto = 0;
+            let decimoTerceiroLiquido = 0; // 1ª parcela é líquida, sem descontos de INSS/IRRF
+
+            if (adiantar13FeriasOpcao === 'sim') {
+                // Cálculo do 13º proporcional e da primeira parcela
+                decimoTerceiroPrimeiraParcelaBruto = ((feriasSalarioBruto + horasExtrasFerias) / 12) * mesesTrabalhados13Ferias / 2;
+                decimoTerceiroLiquido = decimoTerceiroPrimeiraParcelaBruto; // 1ª parcela é isenta de INSS/IRRF
+            }
+
+            // --- CÁLCULO DO TOTAL A RECEBER ---
+            let totalReceber = feriasLiquido + decimoTerceiroLiquido;
+
+
+            // --- EXIBIÇÃO DOS RESULTADOS ---
+            document.getElementById('displayValorSalarioFerias').textContent = formatarMoeda(valorSalarioFeriasProporcional);
+            document.getElementById('displayUmTercoFerias').textContent = formatarMoeda(umTercoFeriasProporcional);
+            document.getElementById('displayAbonoPecuniario').textContent = formatarMoeda(valorAbonoPecuniarioBruto);
+            document.getElementById('displayFeriasTotalBruto').textContent = formatarMoeda(totalBrutoFeriasTributavel + valorAbonoPecuniarioBruto); // Total bruto é a soma de tudo
+
+            document.getElementById('displayINSSFerias').textContent = formatarMoeda(inssFerias);
+            document.getElementById('displayIRRFFerias').textContent = formatarMoeda(irrfFerias);
+            document.getElementById('displayFeriasLiquido').textContent = formatarMoeda(feriasLiquido);
+
+            document.getElementById('displayDecimoTerceiroPrimeiraParcela').textContent = formatarMoeda(decimoTerceiroPrimeiraParcelaBruto);
+            document.getElementById('displayINSSDecimoTerceiro').textContent = formatarMoeda(0); // INSS só na segunda parcela
+            document.getElementById('displayIRRFDecimoTerceiro').textContent = formatarMoeda(0); // IRRF só na segunda parcela
+            document.getElementById('displayDecimoTerceiroLiquido').textContent = formatarMoeda(decimoTerceiroLiquido);
+
+            document.getElementById('displayTotalReceberFerias13').textContent = formatarMoeda(totalReceber);
+
+            document.getElementById('resultadoFerias13').style.display = 'block';
+        }
+
+        // Inicializa a formatação dos campos ao carregar a página
+        window.onload = function() {
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                let valorNumericoInicial = parseMoeda(input.value);
+                input.value = formatarMoeda(valorNumericoInicial);
+            });
+        };
+
+    </script>
 </body>
 </html>
