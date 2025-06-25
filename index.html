@@ -436,6 +436,9 @@
                 <button class="nav-button" onclick="showSection('ferias')">
                     <i class="fas fa-umbrella-beach"></i> Férias
                 </button>
+                <button class="nav-button" onclick="showSection('13-salario')">
+                    <i class="fas fa-gift"></i> 13º Salário
+                </button>
             </div>
         </div>
     </nav>
@@ -854,6 +857,79 @@
                 <div class="result-section" id="resultadoFerias" style="display: none;">
                     <h3><i class="fas fa-sun"></i> Resultado das Férias</h3>
                     <div id="feriasDetalhes"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13º Salário Section -->
+        <section id="13-salario" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-gift"></i>
+                    Calculadora do 13º Salário
+                </h2>
+                <p class="section-description">Calcule a 1ª e 2ª parcela do 13º salário com impostos corretos</p>
+            </div>
+
+            <div class="calculator-container">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="salario13">
+                            <i class="fas fa-dollar-sign"></i>
+                            Salário Base do 13º
+                        </label>
+                        <input type="text" id="salario13" placeholder="0,00" value="R$ 0,00">
+                        <span class="error-message" id="errorSalario13"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="mesesTrabalhados13">
+                            <i class="fas fa-calendar"></i>
+                            Meses Trabalhados no Ano
+                        </label>
+                        <input type="number" id="mesesTrabalhados13" placeholder="12" value="12" min="0" max="12">
+                        <span class="error-message" id="errorMesesTrabalhados13"></span>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="dependentes13">
+                            <i class="fas fa-users"></i>
+                            Número de Dependentes
+                        </label>
+                        <select id="dependentes13">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5+</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="primeiraParcelaRecebida">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            1ª Parcela já Recebida
+                        </label>
+                        <input type="text" id="primeiraParcelaRecebida" placeholder="0,00" value="R$ 0,00">
+                        <span class="error-message" id="errorPrimeiraParcelaRecebida"></span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="calcular13Salario()">
+                        <i class="fas fa-calculator"></i> Calcular 13º Salário
+                    </button>
+                    <button class="btn btn-secondary" onclick="limparCampos()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+
+                <div class="result-section" id="resultado13Salario" style="display: none;">
+                    <h3><i class="fas fa-gift"></i> Resultado do 13º Salário</h3>
+                    <div id="trezeDetalhes"></div>
                 </div>
             </div>
         </section>
