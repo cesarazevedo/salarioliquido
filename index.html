@@ -3,66 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Salário e Benefícios</title>
+    <title>Calculadora de Salário Líquido, Férias e 13º - Gratuita e Completa</title>
+    <meta name="description" content="Calculadora gratuita de salário líquido, férias e 13º salário. Calcule seus descontos de INSS e IRRF de forma simples e rápida. Inclui simulador da 2ª parcela do 13º.">
+    <meta name="keywords" content="calculadora salário líquido, calcular salário, calculadora férias, calculadora 13º salário, INSS, IRRF, desconto salário">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'); /* Adicionado 700 para negritos mais fortes */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8fcf8; /* Fundo mais claro, com um toque de verde */
+            background: linear-gradient(135deg, #f8fcf8 0%, #e8f5e8 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            color: #424242; /* Texto em cinza escuro para melhor contraste */
-            padding: 20px;
+            color: #424242;
+            padding: 0;
             box-sizing: border-box;
+        }
+
+        /* Header */
+        .site-header {
+            width: 100%;
+            background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .site-header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .site-header .subtitle {
+            margin: 5px 0 0 0;
+            font-size: 1.1em;
+            font-weight: 400;
+            opacity: 0.9;
         }
 
         .header-links {
             width: 100%;
             max-width: 1500px;
             text-align: right;
-            margin-bottom: 15px; /* Mais espaço abaixo do link */
+            margin-bottom: 15px;
+            padding: 0 20px;
         }
         .header-links a {
-            color: #388e3c; /* Verde mais escuro para o link */
+            color: #388e3c;
             text-decoration: none;
-            font-weight: 600; /* Link um pouco mais encorpado */
+            font-weight: 600;
             transition: color 0.3s ease;
+            margin: 0 15px;
         }
         .header-links a:hover {
-            color: #2e7d32; /* Verde ainda mais escuro no hover */
+            color: #2e7d32;
             text-decoration: underline;
         }
 
-        /* Novo contêiner para as calculadoras lado a lado */
+        /* Contêiner principal */
+        .main-container {
+            width: 100%;
+            max-width: 1500px;
+            padding: 0 20px;
+        }
+
         .calculators-grid-container {
             display: flex;
             flex-wrap: wrap;
             gap: 30px;
             justify-content: center;
             width: 100%;
-            max-width: 1500px;
             margin-bottom: 30px;
         }
 
         .calculator-container {
-            background-color: #ffffff; /* Fundo branco puro para as calculadoras */
-            padding: 35px; /* Mais padding interno para "respirar" */
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); /* Sombra mais suave e difusa */
+            background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.8s ease-out;
             flex: 1 1 calc(33.333% - 20px);
             max-width: 450px;
             min-width: 300px;
             margin-bottom: 0;
             box-sizing: border-box;
+            border: 1px solid rgba(56, 142, 60, 0.1);
         }
-        /* Para telas com 2 colunas */
+
+        .calculator-title {
+            text-align: center;
+            color: #388e3c;
+            margin-bottom: 35px;
+            font-weight: 700;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
         @media (max-width: 1200px) {
             .calculator-container {
                 flex: 1 1 calc(50% - 15px);
@@ -75,61 +126,54 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1, h2 {
-            text-align: center;
-            color: #388e3c; /* Títulos em verde mais escuro e sólido */
-            margin-bottom: 35px; /* Mais espaço abaixo dos títulos */
-            font-weight: 700; /* Mais negrito para títulos */
-            font-size: 1.8em; /* Tamanho ligeiramente maior para h1/h2 */
-        }
-        h2 {
-            font-size: 1.6em;
-        }
-
         .input-group {
-            margin-bottom: 25px; /* Mais espaço entre os grupos de input */
+            margin-bottom: 25px;
             position: relative;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 10px; /* Mais espaço entre label e input */
+            margin-bottom: 10px;
             font-weight: 500;
-            color: #555555; /* Cor um pouco mais escura para labels */
+            color: #555555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .input-group input[type="text"],
         .input-group input[type="number"],
         .input-group select {
-            width: calc(100% - 24px); /* Ajuste para mais padding interno */
-            padding: 14px 12px; /* Mais padding interno */
-            border: 1px solid #dcdcdc; /* Borda mais suave e clara */
-            border-radius: 8px;
-            font-size: 1.05em; /* Fonte ligeiramente maior */
+            width: calc(100% - 24px);
+            padding: 14px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.05em;
             box-sizing: border-box;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            background: white;
         }
 
         .input-group input[type="text"]:focus,
         .input-group input[type="number"]:focus,
         .input-group select:focus {
-            border-color: #388e3c; /* Verde mais escuro no foco */
+            border-color: #388e3c;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(56, 142, 60, 0.25); /* Sombra de foco mais sutil */
+            box-shadow: 0 0 0 3px rgba(56, 142, 60, 0.15);
+            transform: translateY(-1px);
         }
 
-        /* Estilo para mensagem de erro */
         .error-message {
             color: #d32f2f;
-            font-size: 0.88em; /* Ligeiramente maior */
-            margin-top: 6px; /* Mais espaço acima */
+            font-size: 0.88em;
+            margin-top: 6px;
             display: block;
         }
 
         .input-row {
             display: flex;
-            gap: 25px; /* Mais espaço entre os elementos lado a lado */
-            margin-bottom: 25px; /* Mais espaço abaixo da linha de inputs */
+            gap: 25px;
+            margin-bottom: 25px;
         }
         .input-row .input-group {
             flex: 1;
@@ -137,133 +181,226 @@
         }
 
         .result-section {
-            background-color: #e8f5e9;
-            border-left: 5px solid #388e3c; /* Verde mais escuro */
-            padding: 25px; /* Mais padding interno */
-            border-radius: 8px;
-            margin-top: 35px; /* Mais espaço acima */
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            border-left: 5px solid #388e3c;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 35px;
             text-align: center;
             font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(56, 142, 60, 0.1);
         }
 
         .result-section p {
-            margin: 10px 0; /* Mais espaço entre as linhas de resultado */
+            margin: 10px 0;
             font-weight: 500;
         }
 
         .result-section span {
-            font-weight: 700; /* Mais negrito para valores de resultado */
+            font-weight: 700;
             color: #2e7d32;
         }
 
         .button-group {
             display: flex;
             gap: 15px;
-            margin-top: 30px; /* Mais espaço acima dos botões */
+            margin-top: 30px;
         }
 
         button {
             flex: 1;
-            padding: 18px; /* Botões maiores */
-            background-color: #388e3c; /* Verde mais sólido */
+            padding: 18px;
+            background: linear-gradient(135deg, #388e3c 0%, #4caf50 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1.15em; /* Fonte maior nos botões */
-            font-weight: 600; /* Negrito nos botões */
+            border-radius: 10px;
+            font-size: 1.15em;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
         }
 
         button.clear-button {
-            background-color: #ef5350; /* Vermelho suave */
+            background: linear-gradient(135deg, #ef5350 0%, #f44336 100%);
+            box-shadow: 0 4px 15px rgba(239, 83, 80, 0.3);
         }
-        button.clear-button:hover {
-            background-color: #e53935; /* Vermelho mais escuro no hover */
+
+        button.share-button {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            margin-top: 15px;
+            flex: none;
+            width: 100%;
         }
 
         button:hover {
-            background-color: #2e7d32; /* Verde mais escuro no hover */
-            transform: translateY(-3px); /* Efeito de "subir" um pouco mais */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
         }
 
-        button:active {
-            transform: translateY(0); /* Retorna ao normal ao clicar */
-            background-color: #1b5e20; /* Verde bem escuro ao segurar */
+        button.clear-button:hover {
+            box-shadow: 0 6px 20px rgba(239, 83, 80, 0.4);
         }
 
-        /* Tooltip style */
+        button.share-button:hover {
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+
         .tooltip-icon {
             cursor: help;
-            margin-left: 6px; /* Mais espaço */
             color: #888;
-            font-size: 0.95em; /* Ligeiramente maior */
+            font-size: 0.95em;
         }
 
         .tooltip .tooltiptext {
-            width: 200px; /* Largura um pouco maior */
-            bottom: 130%; /* Posição um pouco mais alta */
-            padding: 8px 10px; /* Mais padding */
-            font-size: 0.85em; /* Ligeiramente maior */
+            width: 200px;
+            bottom: 130%;
+            padding: 8px 10px;
+            font-size: 0.85em;
         }
 
-        /* Estilos específicos para as calculadoras */
         .holiday-thirteenth-calc, .thirteenth-second-parcel-calc {
             margin-top: 0;
-            padding-top: 35px; /* Mantém o padding interno igual ao container principal */
+            padding-top: 35px;
             border-top: none;
-        }
-        #como-usar {
-            margin-top: 40px; /* Mais espaço para a seção como usar */
-            max-width: 800px;
-            padding: 35px; /* Padrao para consistencia */
-        }
-        #como-usar h2 {
-            margin-bottom: 25px;
-        }
-        #como-usar ol {
-            margin-top: 20px;
-            padding-left: 25px; /* Identação da lista */
-        }
-        #como-usar ul {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-left: 20px;
-        }
-        #como-usar li {
-            margin-bottom: 15px; /* Espaço entre os itens da lista */
-            line-height: 1.6; /* Altura da linha para melhor leitura */
-        }
-        #como-usar p {
-            margin-bottom: 15px;
         }
 
         .final-liquid-value {
-            font-size: 1.5em !important; /* Valor final ainda mais destacado */
+            font-size: 1.5em !important;
             font-weight: 700 !important;
             color: #1b5e20 !important;
         }
 
-        /* Estilo para o gráfico */
         .chart-container {
-            width: 90%; /* Gráfico um pouco maior */
-            max-width: 350px; /* Limite máximo maior */
-            margin: 25px auto 0 auto; /* Mais espaço */
-            height: 250px; /* Altura fixa para o canvas */
+            width: 90%;
+            max-width: 350px;
+            margin: 25px auto 0 auto;
+            height: 250px;
         }
 
-        /* --- RESPONSIVIDADE FINAL --- */
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(56, 142, 60, 0.1);
+        }
+
+        .faq-title {
+            text-align: center;
+            color: #388e3c;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            background: #f5f5f5;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #e8f5e8;
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            margin: 0 0 10px 0;
+            line-height: 1.6;
+        }
+
+        /* Como usar section improvements */
+        #como-usar {
+            margin-top: 40px;
+            max-width: 1000px;
+            padding: 35px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(56, 142, 60, 0.1);
+        }
+
+        #como-usar h2 {
+            margin-bottom: 25px;
+            text-align: center;
+            color: #388e3c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Responsividade */
         @media (max-width: 900px) {
+            .site-header h1 {
+                font-size: 1.8em;
+            }
+            
             .calculators-grid-container {
                 gap: 20px;
             }
             .calculator-container {
                 flex: 1 1 calc(50% - 10px);
-                max-width: 450px; /* Aumenta um pouco */
-                padding: 30px; /* Menos padding em telas médias */
+                max-width: 450px;
+                padding: 30px;
             }
-            h1, h2 {
-                font-size: 1.6em;
+            .calculator-title {
+                font-size: 1.4em;
                 margin-bottom: 30px;
             }
             button {
@@ -276,17 +413,28 @@
         }
 
         @media (max-width: 600px) {
-            body {
-                padding: 15px; /* Um pouco mais de padding geral em mobile */
+            .main-container {
+                padding: 15px;
             }
+            
+            .site-header {
+                padding: 15px 0;
+            }
+            
+            .site-header h1 {
+                font-size: 1.6em;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
             .calculators-grid-container {
                 flex-direction: column;
-                gap: 25px; /* Mais espaço entre as calculadoras empilhadas */
+                gap: 25px;
             }
             .calculator-container {
                 flex: 1 1 100%;
                 max-width: 100%;
-                padding: 25px; /* Padding ajustado para mobile */
+                padding: 25px;
             }
             .input-row {
                 flex-direction: column;
@@ -303,8 +451,8 @@
                 font-size: 1em;
                 padding: 14px;
             }
-            h1, h2 {
-                font-size: 1.4em;
+            .calculator-title {
+                font-size: 1.3em;
                 margin-bottom: 25px;
             }
             .result-section {
@@ -318,145 +466,54 @@
                 height: 200px;
                 margin-top: 20px;
             }
-            #como-usar {
+            #como-usar, .faq-section {
                 padding: 25px;
                 margin-top: 30px;
             }
-            #como-usar h2 {
+            .faq-title {
                 font-size: 1.5em;
-            }
-            #como-usar ol, #como-usar ul {
-                padding-left: 15px; /* Menos identação em mobile */
             }
         }
     </style>
 </head>
 <body>
-    <div class="header-links">
-        <a href="#como-usar">Como Usar?</a>
+    <!-- Header -->
+    <div class="site-header">
+        <h1><i class="fas fa-calculator"></i> Calculadora de Salário e Benefícios</h1>
+        <p class="subtitle">Calcule seu salário líquido, férias e 13º salário de forma gratuita e precisa</p>
     </div>
 
-    <div class="calculators-grid-container">
-        <div class="calculator-container">
-            <h1>Calculadora de Salário Líquido</h1>
-
-            <div class="input-group">
-                <label for="salarioBruto">
-                    Salário Bruto
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Valor total antes dos descontos.</span>
-                    </span>
-                </label>
-                <input type="text" id="salarioBruto" placeholder="0,00" data-storage-key="salarioBruto" value="0,00">
-                <span class="error-message" id="errorSalarioBruto"></span>
-            </div>
-
-            <div class="input-group">
-                <label for="dependentes">
-                    Número de Dependentes
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Pessoas que dependem de você financeiramente.</span>
-                    </span>
-                </label>
-                <select id="dependentes" data-storage-key="dependentes">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5+</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="outrosDescontos">
-                    Outros Descontos
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Ex: Vale-transporte, plano de saúde, empréstimos.</span>
-                    </span>
-                </label>
-                <input type="text" id="outrosDescontos" placeholder="0,00" data-storage-key="outrosDescontos" value="0,00">
-                <span class="error-message" id="errorOutrosDescontos"></span>
-            </div>
-
-            <div class="input-group">
-                <label for="beneficios">
-                    Benefícios (Não tributáveis)
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Ex: Vale-alimentação, vale-refeição (geralmente não contam para impostos).</span>
-                    </span>
-                </label>
-                <input type="text" id="beneficios" placeholder="0,00" data-storage-key="beneficios" value="0,00">
-                <span class="error-message" id="errorBeneficios"></span>
-            </div>
-
-            <div class="button-group">
-                <button onclick="calcularSalario()">Calcular Salário Líquido</button>
-                <button class="clear-button" onclick="limparCampos('salario')">Limpar</button>
-            </div>
-
-            <div class="result-section" id="resultado" style="display: none;">
-                <p>Salário Bruto: <span id="displaySalarioBruto"></span></p>
-                <p>Desconto INSS: <span id="displayINSS"></span></p>
-                <p>Desconto IRRF: <span id="displayIRRF"></span></p>
-                <p>Outros Descontos: <span id="displayOutrosDescontos"></span></p>
-                <p>Benefícios: <span id="displayBeneficios"></span></p>
-                <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
-                <p style="font-size: 1.3em;">Salário Líquido: <span id="salarioLiquidoDisplay" style="color: #2e7d32;"></span></p>
-                
-                <div class="chart-container">
-                    <canvas id="salarioChart"></canvas>
-                </div>
-            </div>
+    <div class="main-container">
+        <div class="header-links">
+            <a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a>
+            <a href="#como-usar"><i class="fas fa-info-circle"></i> Como Usar?</a>
         </div>
 
-        <div class="calculator-container holiday-thirteenth-calc">
-            <h2>Calculadora de Férias e 13º Salário</h2>
+        <div class="calculators-grid-container">
+            <div class="calculator-container">
+                <h2 class="calculator-title"><i class="fas fa-money-bill-wave"></i> Calculadora de Salário Líquido</h2>
 
-            <div class="input-row">
                 <div class="input-group">
-                    <label for="feriasSalarioBruto">
-                        Salário Bruto (Férias)
+                    <label for="salarioBruto">
+                        <i class="fas fa-dollar-sign"></i>
+                        Salário Bruto
                         <span class="tooltip tooltip-icon">&#9432;
-                            <span class="tooltiptext">Seu salário base para o cálculo das férias.</span>
+                            <span class="tooltiptext">Valor total antes dos descontos.</span>
                         </span>
                     </label>
-                    <input type="text" id="feriasSalarioBruto" placeholder="0,00" data-storage-key="feriasSalarioBruto" value="0,00">
-                    <span class="error-message" id="errorFeriasSalarioBruto"></span>
+                    <input type="text" id="salarioBruto" placeholder="0,00" data-storage-key="salarioBruto" value="0,00">
+                    <span class="error-message" id="errorSalarioBruto"></span>
                 </div>
 
                 <div class="input-group">
-                    <label for="horasExtrasFerias">
-                        Horas Extras (se houver)
+                    <label for="dependentes">
+                        <i class="fas fa-users"></i>
+                        Número de Dependentes
                         <span class="tooltip tooltip-icon">&#9432;
-                            <span class="tooltiptext">Média das horas extras que serão pagas nas férias.</span>
+                            <span class="tooltiptext">Pessoas que dependem de você financeiramente.</span>
                         </span>
                     </label>
-                    <input type="text" id="horasExtrasFerias" placeholder="0,00" data-storage-key="horasExtrasFerias" value="0,00">
-                    <span class="error-message" id="errorHorasExtrasFerias"></span>
-                </div>
-            </div>
-
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="diasFerias">
-                        Dias de Férias
-                        <span class="tooltip tooltip-icon">&#9432;
-                            <span class="tooltiptext">Número de dias de férias a serem tirados.</span>
-                        </span>
-                    </label>
-                    <input type="number" id="diasFerias" placeholder="0" value="30" min="1" max="60" data-storage-key="diasFerias">
-                    <span class="error-message" id="errorDiasFerias"></span>
-                </div>
-
-                <div class="input-group">
-                    <label for="dependentesFerias">
-                        Número de Dependentes (Férias)
-                        <span class="tooltip tooltip-icon">&#9432;
-                            <span class="tooltiptext">Dependentes para o cálculo do IRRF sobre as férias.</span>
-                        </span>
-                    </label>
-                    <select id="dependentesFerias" data-storage-key="dependentesFerias">
+                    <select id="dependentes" data-storage-key="dependentes">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -465,188 +522,433 @@
                         <option value="5">5+</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="input-row">
                 <div class="input-group">
-                    <label for="abonoPecuniario">
-                        Abono Pecuniário (Vender Férias)
+                    <label for="outrosDescontos">
+                        <i class="fas fa-minus-circle"></i>
+                        Outros Descontos
                         <span class="tooltip tooltip-icon">&#9432;
-                            <span class="tooltiptext">Converter 1/3 das férias em dinheiro. Esse valor não tem INSS e IRRF.</span>
+                            <span class="tooltiptext">Ex: Vale-transporte, plano de saúde, empréstimos.</span>
                         </span>
                     </label>
-                    <select id="abonoPecuniario" data-storage-key="abonoPecuniario">
-                        <option value="nao">Não</option>
-                        <option value="sim">Sim</option>
+                    <input type="text" id="outrosDescontos" placeholder="0,00" data-storage-key="outrosDescontos" value="0,00">
+                    <span class="error-message" id="errorOutrosDescontos"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="beneficios">
+                        <i class="fas fa-plus-circle"></i>
+                        Benefícios (Não tributáveis)
+                        <span class="tooltip tooltip-icon">&#9432;
+                            <span class="tooltiptext">Ex: Vale-alimentação, vale-refeição (geralmente não contam para impostos).</span>
+                        </span>
+                    </label>
+                    <input type="text" id="beneficios" placeholder="0,00" data-storage-key="beneficios" value="0,00">
+                    <span class="error-message" id="errorBeneficios"></span>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="calcularSalario()">
+                        <i class="fas fa-calculator"></i> Calcular Salário Líquido
+                    </button>
+                    <button class="clear-button" onclick="limparCampos('salario')">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+
+                <div class="result-section" id="resultado" style="display: none;">
+                    <p>Salário Bruto: <span id="displaySalarioBruto"></span></p>
+                    <p>Desconto INSS: <span id="displayINSS"></span></p>
+                    <p>Desconto IRRF: <span id="displayIRRF"></span></p>
+                    <p>Outros Descontos: <span id="displayOutrosDescontos"></span></p>
+                    <p>Benefícios: <span id="displayBeneficios"></span></p>
+                    <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+                    <p style="font-size: 1.3em;">Salário Líquido: <span id="salarioLiquidoDisplay" style="color: #2e7d32;"></span></p>
+                    
+                    <button class="share-button" onclick="compartilharResultado('salario')">
+                        <i class="fas fa-share-alt"></i> Compartilhar Resultado
+                    </button>
+                    
+                    <div class="chart-container">
+                        <canvas id="salarioChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-container holiday-thirteenth-calc">
+                <h2 class="calculator-title"><i class="fas fa-umbrella-beach"></i> Calculadora de Férias e 13º Salário</h2>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="feriasSalarioBruto">
+                            <i class="fas fa-dollar-sign"></i>
+                            Salário Bruto (Férias)
+                            <span class="tooltip tooltip-icon">&#9432;
+                                <span class="tooltiptext">Seu salário base para o cálculo das férias.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="feriasSalarioBruto" placeholder="0,00" data-storage-key="feriasSalarioBruto" value="0,00">
+                        <span class="error-message" id="errorFeriasSalarioBruto"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="horasExtrasFerias">
+                            <i class="fas fa-clock"></i>
+                            Horas Extras (se houver)
+                            <span class="tooltip tooltip-icon">&#9432;
+                                <span class="tooltiptext">Média das horas extras que serão pagas nas férias.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="horasExtrasFerias" placeholder="0,00" data-storage-key="horasExtrasFerias" value="0,00">
+                        <span class="error-message" id="errorHorasExtrasFerias"></span>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="diasFerias">
+                            <i class="fas fa-calendar-days"></i>
+                            Dias de Férias
+                            <span class="tooltip tooltip-icon">&#9432;
+                                <span class="tooltiptext">Número de dias de férias a serem tirados.</span>
+                            </span>
+                        </label>
+                        <input type="number" id="diasFerias" placeholder="0" value="30" min="1" max="60" data-storage-key="diasFerias">
+                        <span class="error-message" id="errorDiasFerias"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="dependentesFerias">
+                            <i class="fas fa-users"></i>
+                            Número de Dependentes (Férias)
+                            <span class="tooltip tooltip-icon">&#9432;
+                                <span class="tooltiptext">Dependentes para o cálculo do IRRF sobre as férias.</span>
+                            </span>
+                        </label>
+                        <select id="dependentesFerias" data-storage-key="dependentesFerias">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="abonoPecuniario">
+                            <i class="fas fa-coins"></i>
+                            Abono Pecuniário (Vender Férias)
+                            <span class="tooltip tooltip-icon">&#9432;
+                                <span class="tooltiptext">Converter 1/3 das férias em dinheiro. Esse valor não tem INSS e IRRF.</span>
+                            </span>
+                        </label>
+                        <select id="abonoPecuniario" data-storage-key="abonoPecuniario">
+                            <option value="nao">Não</option>
+                            <option value="sim">Sim</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="adiantar13Ferias">
+                            <i class="fas fa-gift"></i>
+                            Adiantar 1ª Parcela 13º
+                            <span class="tooltip tooltip-icon">&#9432;
+                                <span class="tooltiptext">Receber a primeira parcela do 13º Salário junto com as férias.</span>
+                            </span>
+                        </label>
+                        <select id="adiantar13Ferias" data-storage-key="adiantar13Ferias">
+                            <option value="nao">Não</option>
+                            <option value="sim">Sim</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="mesesTrabalhados13Ferias">
+                        <i class="fas fa-calendar"></i>
+                        Meses Trabalhados no Ano (para 13º)
+                        <span class="tooltip tooltip-icon">&#9432;
+                            <span class="tooltiptext">Número de meses completos trabalhados no ano para o cálculo do 13º salário.</span>
+                        </span>
+                    </label>
+                    <input type="number" id="mesesTrabalhados13Ferias" placeholder="0" value="12" min="0" max="12" data-storage-key="mesesTrabalhados13Ferias">
+                    <span class="error-message" id="errorMesesTrabalhados13Ferias"></span>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="calcularFerias13()">
+                        <i class="fas fa-calculator"></i> Calcular Férias e 13º Salário
+                    </button>
+                    <button class="clear-button" onclick="limparCampos('ferias13')">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+
+                <div class="result-section" id="resultadoFerias13" style="display: none;">
+                    <h3>Detalhes das Férias:</h3>
+                    <p>Valor Salário Férias: <span id="displayValorSalarioFerias"></span></p>
+                    <p>Valor 1/3 Férias: <span id="displayUmTercoFerias"></span></p>
+                    <p>Valor Abono Pecuniário (1/3) + 1/3: <span id="displayAbonoPecuniario"></span></p>
+                    <p>Total Bruto Férias: <span id="displayFeriasTotalBruto"></span></p>
+                    <p>Desconto INSS Férias: <span id="displayINSSFerias"></span></p>
+                    <p>Desconto IRRF Férias: <span id="displayIRRFFerias"></span></p>
+                    <p>Valor Líquido das Férias: <span id="displayFeriasLiquido"></span></p>
+
+                    <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+
+                    <h3>Detalhes 13º Salário (1ª Parcela - se adiantada):</h3>
+                    <p>13º Salário Bruto: <span id="displayDecimoTerceiroPrimeiraParcela"></span></p>
+                    <p>Desconto INSS 13º: <span id="displayINSSDecimoTerceiro"></span></p>
+                    <p>Desconto IRRF 13º: <span id="displayIRRFDecimoTerceiro"></span></p>
+                    <p>13º Salário Líquido: <span id="displayDecimoTerceiroLiquido"></span></p>
+
+                    <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+                    <p style="font-size: 1.3em;">Total a Receber (Férias + 13º): <span id="displayTotalReceberFerias13" class="final-liquid-value"></span></p>
+                    
+                    <button class="share-button" onclick="compartilharResultado('ferias13')">
+                        <i class="fas fa-share-alt"></i> Compartilhar Resultado
+                    </button>
+                </div>
+            </div>
+
+            <div class="calculator-container thirteenth-second-parcel-calc">
+                <h2 class="calculator-title"><i class="fas fa-gift"></i> Simulador da 2ª Parcela do 13º Salário</h2>
+                <p style="text-align: center; font-size: 0.9em; color: #666; margin-bottom: 25px;">O cálculo da 2ª parcela já considera o desconto da 1ª parcela, INSS e IRRF.</p>
+
+                <div class="input-group">
+                    <label for="salarioBruto13Completo">
+                        <i class="fas fa-dollar-sign"></i>
+                        Salário Bruto Base do 13º
+                        <span class="tooltip tooltip-icon">&#9432;
+                            <span class="tooltiptext">Seu salário bruto do mês de pagamento da 2ª parcela (geralmente dezembro).</span>
+                        </span>
+                    </label>
+                    <input type="text" id="salarioBruto13Completo" placeholder="0,00" data-storage-key="salarioBruto13Completo" value="0,00">
+                    <span class="error-message" id="errorSalarioBruto13Completo"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="dependentes13Completo">
+                        <i class="fas fa-users"></i>
+                        Número de Dependentes (13º)
+                        <span class="tooltip tooltip-icon">&#9432;
+                            <span class="tooltiptext">Dependentes para o cálculo do IRRF sobre o 13º salário.</span>
+                        </span>
+                    </label>
+                    <select id="dependentes13Completo" data-storage-key="dependentes13Completo">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5+</option>
                     </select>
                 </div>
 
                 <div class="input-group">
-                    <label for="adiantar13Ferias">
-                        Adiantar 1ª Parcela 13º
+                    <label for="primeiraParcelaRecebida">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        1ª Parcela do 13º já Recebida
                         <span class="tooltip tooltip-icon">&#9432;
-                            <span class="tooltiptext">Receber a primeira parcela do 13º Salário junto com as férias.</span>
+                            <span class="tooltiptext">Valor da 1ª parcela do 13º que você já recebeu.</span>
                         </span>
                     </label>
-                    <select id="adiantar13Ferias" data-storage-key="adiantar13Ferias">
-                        <option value="nao">Não</option>
-                        <option value="sim">Sim</option>
-                    </select>
+                    <input type="text" id="primeiraParcelaRecebida" placeholder="0,00" data-storage-key="primeiraParcelaRecebida" value="0,00">
+                    <span class="error-message" id="errorPrimeiraParcelaRecebida"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="mesesTrabalhados13Completo">
+                        <i class="fas fa-calendar"></i>
+                        Meses Trabalhados no Ano (13º completo)
+                        <span class="tooltip tooltip-icon">&#9432;
+                            <span class="tooltiptext">Número de meses completos trabalhados no ano para o cálculo do 13º salário integral.</span>
+                        </span>
+                    </label>
+                    <input type="number" id="mesesTrabalhados13Completo" placeholder="0" value="12" min="0" max="12" data-storage-key="mesesTrabalhados13Completo">
+                    <span class="error-message" id="errorMesesTrabalhados13Completo"></span>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="calcular13SalarioCompleto()">
+                        <i class="fas fa-calculator"></i> Calcular 2ª Parcela do 13º
+                    </button>
+                    <button class="clear-button" onclick="limparCampos('trezeCompleto')">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+
+                <div class="result-section" id="resultado13Completo" style="display: none;">
+                    <h3>Detalhes da 2ª Parcela do 13º Salário:</h3>
+                    <p>13º Salário Bruto Total: <span id="display13TotalBruto"></span></p>
+                    <p>1ª Parcela Adiantada: <span id="display13PrimeiraAdiantada"></span></p>
+                    <p>Base de Cálculo INSS 13º: <span id="display13BaseINSS"></span></p>
+                    <p>Desconto INSS 13º: <span id="display13INSS"></span></p>
+                    <p>Base de Cálculo IRRF 13º: <span id="display13BaseIRRF"></span></p>
+                    <p>Desconto IRRF 13º: <span id="display13IRRF"></span></p>
+                    <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
+                    <p style="font-size: 1.3em;">Valor Líquido da 2ª Parcela: <span id="display13SegundaParcelaLiquida" class="final-liquid-value"></span></p>
+                    
+                    <button class="share-button" onclick="compartilharResultado('13completo')">
+                        <i class="fas fa-share-alt"></i> Compartilhar Resultado
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section" id="faq">
+            <h2 class="faq-title"><i class="fas fa-question-circle"></i> Perguntas Frequentes (FAQ)</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>O que é INSS e como é calculado?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>INSS (Instituto Nacional do Seguro Social)</strong> é uma contribuição obrigatória que garante seus direitos previdenciários como aposentadoria, auxílio-doença e pensão.</p>
+                    <p><strong>Como é calculado:</strong> É aplicada uma alíquota que varia de 7,5% a 14% sobre seu salário, com um teto máximo de desconto de R$ 951,62 (2025).</p>
+                    <p><strong>Faixas de contribuição 2025:</strong></p>
+                    <p>• Até R$ 1.518,00: 7,5%</p>
+                    <p>• De R$ 1.518,01 até R$ 2.793,88: 9%</p>
+                    <p>• De R$ 2.793,89 até R$ 4.190,83: 12%</p>
+                    <p>• De R$ 4.190,84 até R$ 8.157,41: 14%</p>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label for="mesesTrabalhados13Ferias">
-                    Meses Trabalhados no Ano (para 13º)
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Número de meses completos trabalhados no ano para o cálculo do 13º salário.</span>
-                    </span>
-                </label>
-                <input type="number" id="mesesTrabalhados13Ferias" placeholder="0" value="12" min="0" max="12" data-storage-key="mesesTrabalhados13Ferias">
-                <span class="error-message" id="errorMesesTrabalhados13Ferias"></span>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>O que é IRRF e quando preciso pagar?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>IRRF (Imposto de Renda Retido na Fonte)</strong> é o imposto de renda descontado diretamente do seu salário.</p>
+                    <p><strong>Quando pagar:</strong> Apenas se seu salário (depois do desconto do INSS) for superior a R$ 2.428,80 (2025).</p>
+                    <p><strong>Como reduzir:</strong> Cada dependente (filho, cônjuge sem renda própria) reduz R$ 189,59 da base de cálculo.</p>
+                    <p><strong>Faixas do IRRF 2025:</strong></p>
+                    <p>• Até R$ 2.428,80: Isento</p>
+                    <p>• De R$ 2.428,81 até R$ 2.826,65: 7,5%</p>
+                    <p>• De R$ 2.826,66 até R$ 3.751,05: 15%</p>
+                    <p>• De R$ 3.751,06 até R$ 4.664,68: 22,5%</p>
+                    <p>• Acima de R$ 4.664,68: 27,5%</p>
+                </div>
             </div>
 
-            <div class="button-group">
-                <button onclick="calcularFerias13()">Calcular Férias e 13º Salário</button>
-                <button class="clear-button" onclick="limparCampos('ferias13')">Limpar</button>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Como funciona o cálculo das férias?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Férias são compostas por:</strong></p>
+                    <p>• <strong>Salário das férias:</strong> Proporcional aos dias (30 dias = salário completo)</p>
+                    <p>• <strong>1/3 constitucional:</strong> Adicional obrigatório de 33,3% sobre o valor das férias</p>
+                    <p>• <strong>Abono pecuniário (opcional):</strong> "Vender" até 1/3 das férias (10 dias) em dinheiro</p>
+                    <p><strong>Impostos:</strong> INSS e IRRF incidem sobre o total (salário + 1/3), mas NÃO sobre o abono pecuniário.</p>
+                    <p><strong>Exemplo:</strong> Salário R$ 3.000, 30 dias de férias = R$ 3.000 (férias) + R$ 1.000 (1/3) = R$ 4.000 bruto</p>
+                </div>
             </div>
 
-            <div class="result-section" id="resultadoFerias13" style="display: none;">
-                <h3>Detalhes das Férias:</h3>
-                <p>Valor Salário Férias: <span id="displayValorSalarioFerias"></span></p>
-                <p>Valor 1/3 Férias: <span id="displayUmTercoFerias"></span></p>
-                <p>Valor Abono Pecuniário (1/3) + 1/3: <span id="displayAbonoPecuniario"></span></p>
-                <p>Total Bruto Férias: <span id="displayFeriasTotalBruto"></span></p>
-                <p>Desconto INSS Férias: <span id="displayINSSFerias"></span></p>
-                <p>Desconto IRRF Férias: <span id="displayIRRFFerias"></span></p>
-                <p>Valor Líquido das Férias: <span id="displayFeriasLiquido"></span></p>
-
-                <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
-
-                <h3>Detalhes 13º Salário (1ª Parcela - se adiantada):</h3>
-                <p>13º Salário Bruto: <span id="displayDecimoTerceiroPrimeiraParcela"></span></p>
-                <p>Desconto INSS 13º: <span id="displayINSSDecimoTerceiro"></span></p>
-                <p>Desconto IRRF 13º: <span id="displayIRRFDecimoTerceiro"></span></p>
-                <p>13º Salário Líquido: <span id="displayDecimoTerceiroLiquido"></span></p>
-
-                <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
-                <p style="font-size: 1.3em;">Total a Receber (Férias + 13º): <span id="displayTotalReceberFerias13" class="final-liquid-value"></span></p>
-            </div>
-        </div>
-
-        <div class="calculator-container thirteenth-second-parcel-calc">
-            <h2>Simulador da 2ª Parcela do 13º Salário</h2>
-            <p style="text-align: center; font-size: 0.9em; color: #666; margin-bottom: 25px;">O cálculo da 2ª parcela já considera o desconto da 1ª parcela, INSS e IRRF.</p>
-
-            <div class="input-group">
-                <label for="salarioBruto13Completo">
-                    Salário Bruto Base do 13º
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Seu salário bruto do mês de pagamento da 2ª parcela (geralmente dezembro).</span>
-                    </span>
-                </label>
-                <input type="text" id="salarioBruto13Completo" placeholder="0,00" data-storage-key="salarioBruto13Completo" value="0,00">
-                <span class="error-message" id="errorSalarioBruto13Completo"></span>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Como é pago o 13º salário?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>O 13º salário é pago em duas parcelas:</strong></p>
+                    <p><strong>1ª Parcela (até 30/11):</strong></p>
+                    <p>• Valor: 50% do salário bruto proporcional aos meses trabalhados</p>
+                    <p>• SEM descontos de INSS e IRRF</p>
+                    <p>• Pode ser antecipada junto com as férias</p>
+                    <p><strong>2ª Parcela (até 20/12):</strong></p>
+                    <p>• Valor: 50% restante</p>
+                    <p>• COM descontos de INSS e IRRF calculados sobre o valor total do 13º</p>
+                    <p>• Já desconta o valor da 1ª parcela recebida</p>
+                    <p><strong>Proporcionalidade:</strong> (Meses trabalhados ÷ 12) × Salário bruto</p>
+                </div>
             </div>
 
-            <div class="input-group">
-                <label for="dependentes13Completo">
-                    Número de Dependentes (13º)
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Dependentes para o cálculo do IRRF sobre o 13º salário.</span>
-                    </span>
-                </label>
-                <select id="dependentes13Completo" data-storage-key="dependentes13Completo">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5+</option>
-                </select>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Os valores calculados são exatos?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Sim!</strong> Nossa calculadora usa as tabelas oficiais do governo brasileiro atualizadas para 2025.</p>
+                    <p><strong>O que incluímos:</strong></p>
+                    <p>• Tabelas oficiais de INSS e IRRF 2025</p>
+                    <p>• Cálculo correto da progressividade dos impostos</p>
+                    <p>• Regras específicas para férias, 13º e abono pecuniário</p>
+                    <p><strong>Atenção:</strong> Alguns benefícios específicos da sua empresa ou acordos coletivos podem não estar incluídos. Para casos complexos, consulte o RH da sua empresa.</p>
+                </div>
             </div>
 
-            <div class="input-group">
-                <label for="primeiraParcelaRecebida">
-                    1ª Parcela do 13º já Recebida
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Valor da 1ª parcela do 13º que você já recebeu.</span>
-                    </span>
-                </label>
-                <input type="text" id="primeiraParcelaRecebida" placeholder="0,00" data-storage-key="primeiraParcelaRecebida" value="0,00">
-                <span class="error-message" id="errorPrimeiraParcelaRecebida"></span>
-            </div>
-
-            <div class="input-group">
-                <label for="mesesTrabalhados13Completo">
-                    Meses Trabalhados no Ano (13º completo)
-                    <span class="tooltip tooltip-icon">&#9432;
-                        <span class="tooltiptext">Número de meses completos trabalhados no ano para o cálculo do 13º salário integral.</span>
-                    </span>
-                </label>
-                <input type="number" id="mesesTrabalhados13Completo" placeholder="0" value="12" min="0" max="12" data-storage-key="mesesTrabalhados13Completo">
-                <span class="error-message" id="errorMesesTrabalhados13Completo"></span>
-            </div>
-
-            <div class="button-group">
-                <button onclick="calcular13SalarioCompleto()">Calcular 2ª Parcela do 13º</button>
-                <button class="clear-button" onclick="limparCampos('trezeCompleto')">Limpar</button>
-            </div>
-
-            <div class="result-section" id="resultado13Completo" style="display: none;">
-                <h3>Detalhes da 2ª Parcela do 13º Salário:</h3>
-                <p>13º Salário Bruto Total: <span id="display13TotalBruto"></span></p>
-                <p>1ª Parcela Adiantada: <span id="display13PrimeiraAdiantada"></span></p>
-                <p>Base de Cálculo INSS 13º: <span id="display13BaseINSS"></span></p>
-                <p>Desconto INSS 13º: <span id="display13INSS"></span></p>
-                <p>Base de Cálculo IRRF 13º: <span id="display13BaseIRRF"></span></p>
-                <p>Desconto IRRF 13º: <span id="display13IRRF"></span></p>
-                <hr style="border: none; border-top: 1px solid #c8e6c9; margin: 15px 0;">
-                <p style="font-size: 1.3em;">Valor Líquido da 2ª Parcela: <span id="display13SegundaParcelaLiquida" class="final-liquid-value"></span></p>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Posso confiar na segurança dos meus dados?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Sim, seus dados estão seguros!</strong></p>
+                    <p>• Todos os cálculos são feitos no seu próprio navegador</p>
+                    <p>• Não enviamos suas informações para nenhum servidor</p>
+                    <p>• Os dados ficam salvos apenas no seu dispositivo</p>
+                    <p>• Você pode limpar os dados a qualquer momento clicando em "Limpar"</p>
+                    <p>• O site não coleta nem armazena informações pessoais</p>
+                </div>
             </div>
         </div>
-    </div> <div class="calculator-container" id="como-usar">
-        <h2>Como Usar a Calculadora?</h2>
-        <p>Este site possui três calculadoras para te ajudar a entender seus valores de salário e benefícios:</p>
-        <ol>
-            <li>
-                <strong>Calculadora de Salário Líquido:</strong>
-                <ul>
-                    <li>**Salário Bruto:** É o seu salário antes de qualquer desconto.</li>
-                    <li>**Número de Dependentes:** Pessoas que dependem financeiramente de você (ex: filhos), isso pode reduzir o Imposto de Renda.</li>
-                    <li>**Outros Descontos:** Valores que são descontados do seu salário (ex: vale-transporte, plano de saúde, empréstimos).</li>
-                    <li>**Benefícios (Não tributáveis):** Valores que você recebe e que não são considerados para o cálculo de impostos (ex: vale-alimentação, vale-refeição).</li>
-                    <li>Clique em "Calcular Salário Líquido" para ver quanto você receberá de fato.</li>
-                    <li>Um gráfico mostrará a proporção do seu salário para os descontos.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Calculadora de Férias e 13º Salário (1ª Parcela):</strong>
-                <ul>
-                    <li>**Salário Bruto (Férias) e Horas Extras:** Use seu salário e média de horas extras para o cálculo da sua remuneração de férias.</li>
-                    <li>**Dias de Férias:** Quantos dias de férias você vai tirar (normalmente 30 dias, mas pode ser até 60 para algumas profissões específicas, como professores e juízes).</li>
-                    <li>**Número de Dependentes (Férias):** Os dependentes também ajudam a reduzir o Imposto de Renda nas férias.</li>
-                    <li>**Abono Pecuniário (Vender Férias):** Se você decidir vender 1/3 das suas férias (receber em dinheiro em vez de folgar). Esse valor tem tratamento diferente nos impostos e é isento de INSS e IRRF.</li>
-                    <li>**Adiantar 1ª Parcela 13º:** Se você vai receber a primeira metade do seu 13º Salário junto com as férias. A primeira parcela do 13º não tem descontos de INSS e IRRF.</li>
-                    <li>**Meses Trabalhados no Ano (para 13º):** Quantos meses você trabalhou no ano para calcular a parte proporcional do 13º.</li>
-                    <li>Clique em "Calcular Férias e 13º Salário" para ver os detalhes.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Simulador da 2ª Parcela do 13º Salário:</strong>
-                <ul>
-                    <li>**Salário Bruto Base do 13º:** Seu salário do mês de pagamento da 2ª parcela (geralmente em dezembro).</li>
-                    <li>**Número de Dependentes (13º):** Dependentes para o cálculo do IRRF.</li>
-                    <li>**1ª Parcela do 13º já Recebida:** O valor que você já recebeu da primeira parcela do 13º.</li>
-                    <li>**Meses Trabalhados no Ano (13º completo):** Total de meses trabalhados no ano.</li>
-                    <li>Clique em "Calcular 2ª Parcela do 13º" para ver o valor líquido. Lembre-se que INSS e IRRF são descontados apenas na 2ª parcela.</li>
-                </ul>
-            </li>
-        </ol>
-        <p>Os valores de impostos (INSS e IRRF) são baseados nas tabelas oficiais do Brasil para o ano de 2025.</p>
-        <p>Para limpar os campos e começar um novo cálculo, clique no botão "Limpar" de cada calculadora.</p>
+
+        <div class="calculator-container" id="como-usar">
+            <h2><i class="fas fa-info-circle"></i> Como Usar a Calculadora?</h2>
+            <p>Este site possui três calculadoras para te ajudar a entender seus valores de salário e benefícios:</p>
+            <ol>
+                <li>
+                    <strong>Calculadora de Salário Líquido:</strong>
+                    <ul>
+                        <li>**Salário Bruto:** É o seu salário antes de qualquer desconto.</li>
+                        <li>**Número de Dependentes:** Pessoas que dependem financeiramente de você (ex: filhos), isso pode reduzir o Imposto de Renda.</li>
+                        <li>**Outros Descontos:** Valores que são descontados do seu salário (ex: vale-transporte, plano de saúde, empréstimos).</li>
+                        <li>**Benefícios (Não tributáveis):** Valores que você recebe e que não são considerados para o cálculo de impostos (ex: vale-alimentação, vale-refeição).</li>
+                        <li>Clique em "Calcular Salário Líquido" para ver quanto você receberá de fato.</li>
+                        <li>Um gráfico mostrará a proporção do seu salário para os descontos.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Calculadora de Férias e 13º Salário (1ª Parcela):</strong>
+                    <ul>
+                        <li>**Salário Bruto (Férias) e Horas Extras:** Use seu salário e média de horas extras para o cálculo da sua remuneração de férias.</li>
+                        <li>**Dias de Férias:** Quantos dias de férias você vai tirar (normalmente 30 dias, mas pode ser até 60 para algumas profissões específicas, como professores e juízes).</li>
+                        <li>**Número de Dependentes (Férias):** Os dependentes também ajudam a reduzir o Imposto de Renda nas férias.</li>
+                        <li>**Abono Pecuniário (Vender Férias):** Se você decidir vender 1/3 das suas férias (receber em dinheiro em vez de folgar). Esse valor tem tratamento diferente nos impostos e é isento de INSS e IRRF.</li>
+                        <li>**Adiantar 1ª Parcela 13º:** Se você vai receber a primeira metade do seu 13º Salário junto com as férias. A primeira parcela do 13º não tem descontos de INSS e IRRF.</li>
+                        <li>**Meses Trabalhados no Ano (para 13º):** Quantos meses você trabalhou no ano para calcular a parte proporcional do 13º.</li>
+                        <li>Clique em "Calcular Férias e 13º Salário" para ver os detalhes.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Simulador da 2ª Parcela do 13º Salário:</strong>
+                    <ul>
+                        <li>**Salário Bruto Base do 13º:** Seu salário do mês de pagamento da 2ª parcela (geralmente em dezembro).</li>
+                        <li>**Número de Dependentes (13º):** Dependentes para o cálculo do IRRF.</li>
+                        <li>**1ª Parcela do 13º já Recebida:** O valor que você já recebeu da primeira parcela do 13º.</li>
+                        <li>**Meses Trabalhados no Ano (13º completo):** Total de meses trabalhados no ano.</li>
+                        <li>Clique em "Calcular 2ª Parcela do 13º" para ver o valor líquido. Lembre-se que INSS e IRRF são descontados apenas na 2ª parcela.</li>
+                    </ul>
+                </li>
+            </ol>
+            <p>Os valores de impostos (INSS e IRRF) são baseados nas tabelas oficiais do Brasil para o ano de 2025.</p>
+            <p>Para limpar os campos e começar um novo cálculo, clique no botão "Limpar" de cada calculadora.</p>
+        </div>
     </div>
 
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i> <span id="notification-text"></span>
+    </div>
 
     <script>
         // Variável global para armazenar a instância do gráfico
@@ -660,6 +962,61 @@
         function parseMoeda(texto) {
             const valorLimpo = texto.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
             return parseFloat(valorLimpo) || 0;
+        }
+
+        // Função para mostrar notificação
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Função para compartilhar resultado
+        function compartilharResultado(tipo) {
+            let texto = '';
+            
+            if (tipo === 'salario') {
+                const salarioBruto = document.getElementById('displaySalarioBruto').textContent;
+                const salarioLiquido = document.getElementById('salarioLiquidoDisplay').textContent;
+                texto = `💰 Meu Salário Líquido\n\nSalário Bruto: ${salarioBruto}\nSalário Líquido: ${salarioLiquido}\n\nCalculado em: ${window.location.href}`;
+            } else if (tipo === 'ferias13') {
+                const totalReceber = document.getElementById('displayTotalReceberFerias13').textContent;
+                texto = `🏖️ Minhas Férias e 13º Salário\n\nTotal a Receber: ${totalReceber}\n\nCalculado em: ${window.location.href}`;
+            } else if (tipo === '13completo') {
+                const segundaParcela = document.getElementById('display13SegundaParcelaLiquida').textContent;
+                texto = `🎁 Minha 2ª Parcela do 13º\n\nValor Líquido: ${segundaParcela}\n\nCalculado em: ${window.location.href}`;
+            }
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Calculadora de Salário',
+                    text: texto
+                });
+            } else {
+                navigator.clipboard.writeText(texto).then(() => {
+                    showNotification('Resultado copiado para a área de transferência!');
+                });
+            }
+        }
+
+        // Função para toggle do FAQ
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            answer.classList.toggle('active');
+            
+            if (answer.classList.contains('active')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
         }
 
         // Funções de validação
@@ -681,7 +1038,7 @@
                 return null;
             }
             errorElement.textContent = ""; // Limpa a mensagem de erro
-            inputElement.style.borderColor = '#dcdcdc'; // Volta a borda normal
+            inputElement.style.borderColor = '#e0e0e0'; // Volta a borda normal
             return parsedValue;
         }
 
@@ -702,10 +1059,9 @@
                 return null;
             }
             errorElement.textContent = "";
-            inputElement.style.borderColor = '#dcdcdc';
+            inputElement.style.borderColor = '#e0e0e0';
             return parsedValue;
         }
-
 
         // Adiciona listeners para formatar os inputs APENAS ao sair do foco (blur)
         document.querySelectorAll('input[type="text"]').forEach(input => {
@@ -736,7 +1092,7 @@
                 // Limpa a mensagem de erro ao focar
                 const errorId = `error${this.id.charAt(0).toUpperCase() + this.id.slice(1)}`;
                 document.getElementById(errorId).textContent = "";
-                this.style.borderColor = '#dcdcdc';
+                this.style.borderColor = '#e0e0e0';
             });
         });
 
@@ -762,10 +1118,9 @@
             input.addEventListener('focus', function() {
                  const errorId = `error${this.id.charAt(0).toUpperCase() + this.id.slice(1)}`;
                  document.getElementById(errorId).textContent = "";
-                 this.style.borderColor = '#dcdcdc';
+                 this.style.borderColor = '#e0e0e0';
             });
         });
-
 
         // Funções de cálculo de INSS e IRRF reutilizáveis
         function calcularINSS(baseCalculoINSS) {
@@ -814,7 +1169,6 @@
             }
             return Math.max(0, irrf);
         }
-
 
         // ===============================================
         // Funções de Cálculo do Salário Líquido
@@ -909,7 +1263,6 @@
             // --- CÁLCULO DO TOTAL A RECEBER ---
             let totalReceber = feriasLiquido + decimoTerceiroLiquido;
 
-
             // --- EXIBIÇÃO DOS RESULTADOS ---
             document.getElementById('displayValorSalarioFerias').textContent = formatarMoeda(valorSalarioFeriasProporcional);
             document.getElementById('displayUmTercoFerias').textContent = formatarMoeda(umTercoFeriasProporcional);
@@ -967,7 +1320,6 @@
             document.getElementById('resultado13Completo').style.display = 'block';
         }
 
-
         // ===============================================
         // Funções de Limpeza, Salvar/Carregar LocalStorage, Gráficos
         // ===============================================
@@ -980,7 +1332,7 @@
                     document.getElementById(id).value = formatarMoeda(0);
                     localStorage.removeItem(id);
                     document.getElementById(`error${id.charAt(0).toUpperCase() + id.slice(1)}`).textContent = "";
-                    document.getElementById(id).style.borderColor = '#dcdcdc';
+                    document.getElementById(id).style.borderColor = '#e0e0e0';
                 });
                 document.getElementById('dependentes').value = '0';
                 localStorage.removeItem('dependentes');
@@ -996,7 +1348,7 @@
                     document.getElementById(id).value = formatarMoeda(0);
                     localStorage.removeItem(id);
                     document.getElementById(`error${id.charAt(0).toUpperCase() + id.slice(1)}`).textContent = "";
-                    document.getElementById(id).style.borderColor = '#dcdcdc';
+                    document.getElementById(id).style.borderColor = '#e0e0e0';
                 });
 
                 const numberFields = ['diasFerias', 'mesesTrabalhados13Ferias'];
@@ -1004,7 +1356,7 @@
                     document.getElementById(id).value = (id === 'diasFerias') ? '30' : '12';
                     localStorage.removeItem(id);
                     document.getElementById(`error${id.charAt(0).toUpperCase() + id.slice(1)}`).textContent = "";
-                    document.getElementById(id).style.borderColor = '#dcdcdc';
+                    document.getElementById(id).style.borderColor = '#e0e0e0';
                 });
                 
                 document.getElementById('dependentesFerias').value = '0';
@@ -1021,18 +1373,20 @@
                     document.getElementById(id).value = formatarMoeda(0);
                     localStorage.removeItem(id);
                     document.getElementById(`error${id.charAt(0).toUpperCase() + id.slice(1)}`).textContent = "";
-                    document.getElementById(id).style.borderColor = '#dcdcdc';
+                    document.getElementById(id).style.borderColor = '#e0e0e0';
                 });
 
                 document.getElementById('mesesTrabalhados13Completo').value = '12';
                 localStorage.removeItem('mesesTrabalhados13Completo');
                 document.getElementById('errorMesesTrabalhados13Completo').textContent = "";
-                document.getElementById('mesesTrabalhados13Completo').style.borderColor = '#dcdcdc';
+                document.getElementById('mesesTrabalhados13Completo').style.borderColor = '#e0e0e0';
 
                 document.getElementById('dependentes13Completo').value = '0';
                 localStorage.removeItem('dependentes13Completo');
                 document.getElementById('resultado13Completo').style.display = 'none';
             }
+            
+            showNotification('Campos limpos com sucesso!');
         }
 
         // Função para carregar valores do LocalStorage
@@ -1099,7 +1453,6 @@
                 }
             }
 
-
             if (salarioChartInstance) {
                 salarioChartInstance.data.labels = dataLabels;
                 salarioChartInstance.data.datasets[0].data = dataValues;
@@ -1154,7 +1507,6 @@
             }
         }
 
-
         // Inicializa a formatação dos campos e esconde os resultados ao carregar a página
         window.onload = function() {
             // Carrega valores salvos
@@ -1171,7 +1523,6 @@
             document.getElementById('resultadoFerias13').style.display = 'none';
             document.getElementById('resultado13Completo').style.display = 'none';
         };
-
     </script>
 </body>
 </html>
